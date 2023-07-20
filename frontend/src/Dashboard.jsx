@@ -1,112 +1,25 @@
 import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
 import { initFlowbite } from 'flowbite'
-import Home  from './dashboard/Home'
-import Cards from "./dashboard/Cards"
-import Wallet from "./dashboard/Wallet"
-import Settings from "./dashboard/Settings"
-import Activity from "./dashboard/Activity"
-import Inbox from "./dashboard/Inbox"
-import Footer from "./Footer"
-import Popup,{Message} from "./Popups"
+import Home  from './components/Home'
+import Settings from "./components/Settings"
+import Activity from "./components/Activity"
+import Inbox from "./components/Inbox"
 
-let socket = null;
-let msg = null;
-let formatAddress = (address) => {
-    return address.slice(0,5)+'...'+address.slice(-5)
-}
 export default function Dashboard(){
     let [page, setPage] = useState('home')
-    let [popup, setPopup] = useState(false)
-    let [popupMessage, setPopupMessage] = useState('')
-    let [popupHead, setPopupHead] = useState('')
-    let [newMessage, setNewMessage] = useState(false)
-    let [message, setMessage] = useState()
-    let [messageType,setMessageType] = useState('')
 
-    let navigate = useNavigate()
     //if not logged in, redirect to login page via useEffect
     useEffect(()=>{
         initFlowbite();
-        socket = new WebSocket("wss://solana-iot.herokuapp.com/");
-        // socket = new WebSocket("ws://192.168.100.2/");
-        //on open send message
-        socket.onopen = () => {
-            socket.send(JSON.stringify({
-                type: 'setup',
-                data: {
-                    username: localStorage.getItem('username')
-                }
-            }))
-        }
-        //on message print message
-        socket.onmessage = (e) => {
-            console.log('message received on dashboard')
-            msg = JSON.parse(e.data)
-            if(msg.type === 'transact'){
-                setPopupMessage(msg.message+` station`)
-                setPopupHead('Authorization request')
-                setPopup(true)
-                setTimeout(()=>{setPopup(false)},10000);
-            }
-            if(msg.type === 'update'){
-                console.log(msg);
-                if(msg.status === 'success') setMessageType('success')
-                if(msg.type === 'error') setMessageType('error')
-                setMessage(msg.message)
-                setNewMessage(true)
-            }
-            if(msg.type === 'pong') console.log('Pong received');
-        }
-        //ping socket every 50s
-        setInterval(()=>{
-            console.log('pinging socket')
-            socket.send(JSON.stringify({
-                type: 'ping'
-            }))
-        },50000)
-        // if(!localStorage.getItem('username')) navigate('/login')
     },[])
     let logout = (e) => {
         e.preventDefault()
-        socket.send(JSON.stringify({
-            type: 'logout',
-            data: {
-                username: localStorage.getItem('username')
-            }
-        }))
-        socket.close()
         localStorage.removeItem('username')
-        navigate('/')
-    }
-    let accept = () =>{
-        socket.send(JSON.stringify({
-            type: 'authorize',
-            data: {
-                username: localStorage.getItem('username'),
-                status: 'accept',
-                address: msg.address,
-                amount: msg.amount
-            }
-        }))
-        setPopup(false);
-    }
-    let deny = () =>{
-        socket.send(JSON.stringify({
-            type: 'authorize',
-            data: {
-                username: localStorage.getItem('username'),
-                status: 'deny'
-            }
-        }))
-        setPopup(false);
     }
     
     return(
         <div>
-            {popup && <Popup head={popupHead} message={popupMessage} accept={accept} deny={deny} />}
-            {newMessage && <Message type={messageType} message={message} />}
-            <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+            <nav class="fixed top-0 z-50 w-full bg-gray-800 border-gray-700">
             <div class="px-3 py-3 lg:px-5 lg:pl-3">
                 <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start">
@@ -118,7 +31,7 @@ export default function Dashboard(){
                     </button>
                     <a href="/" class="flex ml-2 md:mr-24">
                     <img src="/logo.svg" class="h-8 mr-3" alt="Logo" />
-                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Sol-Iot</span>
+                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-gray-100">HotelHUB</span>
                     </a>
                 </div>
                 <div class="flex items-center">
@@ -157,7 +70,7 @@ export default function Dashboard(){
             </nav>
 
             <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
-            <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+            <div class="h-full px-3 pb-4 overflow-y-auto bg-gray-800">
                 <ul class="space-y-2 font-medium">
                     <li onClick={e=>setPage('home')}>
                         <button href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -196,14 +109,11 @@ export default function Dashboard(){
 
             {/* Start of main content */}
 
-            <div class="sm:ml-64">
+            <div class="sm:ml-64 bg-gray-700 h-screen overflow-y-scroll">
                 {page === 'home' && <Home />}
-                    {page === 'cards' && <Cards />}
-                    {page === 'wallet' && <Wallet socket={socket} />}
                     {page === 'settings' && <Settings />}
                     {page === 'inbox' && <Inbox />}
                     {page === 'activity' && <Activity />}
-                    <Footer />
             </div>
         </div>
     )

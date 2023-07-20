@@ -1,3 +1,60 @@
 {
-    "baseURL": "https://solana-iot.herokuapp.com"
+    "baseURL": "https://solana-iot.herokuapp.com",
+    "HotelData":[
+        {
+            "name":"Alpha",
+            "sections":[
+                {
+                    "name":"Ground Floor",
+                    "waitstuff":[
+                        {
+                            "name":"John",
+                            "numbers":{
+                                "actuals":[],
+                                "targets":[]
+                            }
+                        },
+                        {
+                            "name":"Mary",
+                            "numbers":{
+                                "actuals":[],
+                                "targets":[]
+                            }
+                        }
+                    ],
+                    "numbers":{
+                        "actuals":[],
+                        "targets":[]
+                    }
+                },
+                {
+                    "name":"First Floor",
+                    "waitstuff":[
+                        {
+                            "name":"Jane",
+                            "numbers":{
+                                "actuals":[],
+                                "targets":[]
+                            }
+                        },
+                        {
+                            "name":"Sebastian",
+                            "numbers":{
+                                "actuals":[],
+                                "targets":[]
+                            }
+                        }
+                    ],
+                    "numbers":{
+                        "actuals":[],
+                        "targets":[]
+                    }
+                }
+            ],
+            "numbers":{
+                "actuals":[],
+                "targets":[]
+            }
+        }
+    ]
 }

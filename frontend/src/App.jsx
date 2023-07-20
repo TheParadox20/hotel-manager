@@ -1,8 +1,12 @@
-function App() {
+import Login from "./Login"
+import Dashboard from "./Dashboard"
 
+function App() {
   return (
     <>
-      <h1>React App</h1>
+      {
+        false ? <Dashboard /> : <Login />
+      }
     </>
   )
 }

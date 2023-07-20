@@ -1,14 +1,12 @@
 import Login from "./Login"
 import Dashboard from "./Dashboard"
 
-function App() {
+export default function App() {
   return (
     <>
       {
-        false ? <Dashboard /> : <Login />
+        true ? <Dashboard /> : <Login />
       }
     </>
   )
 }
-
-export default App

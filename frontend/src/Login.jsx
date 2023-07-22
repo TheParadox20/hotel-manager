@@ -1,7 +1,10 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import {baseURL} from './data.json'
+import { Context } from "./ContextProvider"
 
 export default function Login() {
+    let { User } = useContext(Context);
+    let [user, setUser] = User;
     let [signup, setSignup] = useState(false)
     let [username, setUsername] = useState('')
     let [email, setEmail] = useState('')
@@ -11,26 +14,30 @@ export default function Login() {
 
     let login = (e) => {
         e.preventDefault()
-        console.log('login')
-        fetch(`${baseURL}/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username:username,
-                password:password
-            })
-        }).then(res => res.json()).then(data => {
-            console.log(data)
-            if(data.status === 'success'){
-                localStorage.setItem('username',data.username)
-                localStorage.setItem('email',data.email)
-                localStorage.setItem('address',data.address)
-            }else if(data.status === 'error'){
-                alert(data.message)
-            }
-        })
+        if(username==password) {
+            setUser(username)
+            console.log('login')
+        }
+        
+        // fetch(`${baseURL}/login`, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         username:username,
+        //         password:password
+        //     })
+        // }).then(res => res.json()).then(data => {
+        //     console.log(data)
+        //     if(data.status === 'success'){
+        //         localStorage.setItem('username',data.username)
+        //         localStorage.setItem('email',data.email)
+        //         localStorage.setItem('address',data.address)
+        //     }else if(data.status === 'error'){
+        //         alert(data.message)
+        //     }
+        // })
     }
     let signUp = (e) => {
         e.preventDefault()

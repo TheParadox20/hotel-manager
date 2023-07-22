@@ -7,7 +7,6 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const data = {
   datasets: [
     {
-      label: '# of Votes',
       data: [19, 3, 5, 2],
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
@@ -31,9 +30,14 @@ const data = {
   labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
 };
 const options = {
+    responsive: true,
     plugins: {
       legend: {
         position: 'bottom', // Display the legend (labels) at the bottom
+      },
+      title: {
+        display: true,
+        text: 'Average Sales',
       },
     },
   };

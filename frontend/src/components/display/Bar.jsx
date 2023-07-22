@@ -26,7 +26,7 @@ import {
       },
       title: {
         display: true,
-        text: 'Chart.js Bar Chart',
+        text: 'Variance',
       },
     },
   };

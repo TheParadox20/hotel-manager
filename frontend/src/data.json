@@ -3,9 +3,16 @@
     "epoch":"20230601",
     "Key":{},
     "HotelData":[
-        ["Alpha","Balcony","John","Sebastian",20000,16750,"20230601"],
-        ["Hotel","Ground floor","Supervisor","waitstuff","Target","actual","timestamp"],
-        ["Beta","Section","Supervisor","waitstuff","Target","actual","timestamp"],
-        ["Hotel","Section","Supervisor","waitstuff","Target","actual","timestamp"]
+        ["Alpha","Balcony","Sebastian","Andrew",20000,16750,"20230601"],
+        ["Alpha","Balcony","Sebastian","John",20000,16750,"20230601"],
+        ["Alpha","Balcony","Sebastian","Sheila",20000,16750,"20230601"],
+        ["Alpha","Ground floor","Jacob","Abner",20000,16750,"20230601"],
+        ["Alpha","Ground floor","Jacob","Gabriel",20000,16750,"20230601"],
+        ["Alpha","Ground floor","Jacob","Josephine",20000,16750,"20230601"],
+        ["Alpha","Ground floor","Jacob","Terry",20000,16750,"20230601"],
+        ["Alpha","Lounge","Isabella","Felicia",20000,16750,"20230601"],
+        ["Alpha","Lounge","Isabella","John",20000,16750,"20230601"],
+        ["Alpha","Balcony","Jacob","John",20000,16750,"20230602"],
+        ["Alpha","Balcony","Jacob","John",20000,16750,"20230602"]
     ]
 }

@@ -33,7 +33,7 @@ export default function Home(){
     }, []);
 
     return (
-        <div class="p-4 rounded-lg border-gray-700 mt-14">
+        <div class="p-4 rounded-lg border-gray-700 mt-14 md:overflow-y-none">
             <div className="grid md:grid-cols-3 grid-cols-1 gap-4">
                 <div className="md:col-span-2 flex items-center justify-center mb-4 rounded bg-gray-800 h-96">
                     {choice === "bar" ? <Bur /> : null}
@@ -72,13 +72,23 @@ export default function Home(){
                 </div>
             </div>
             <div className="grid md:grid-cols-3 grid-cols-1 gap-4">
-                <div className="md:col-span-2 flex mb-4 rounded bg-gray-800 overflow-x-scroll">
+                <div className="md:col-span-2 flex rounded bg-gray-800 overflow-x-scroll overflow-y-scroll md:h-2/3">
                     <Table/>
                 </div>
-                <div className="flex flex-col order-first md:order-last items-center justify-center mb-4 rounded bg-gray-800 text-gray-50">
-                    <h3>Filter</h3>
-                    <input type="search" placeholder="search" value={search} onChange={e=>setSearch(e.target.value)}/>
-                    <div>Hotels</div>
+                <div className="flex flex-col order-first md:order-last  rounded bg-gray-800 text-gray-50 h-96 w-full md:w-3/4 mx-auto relative px-2">
+                    <div className="flex my-4">
+                        <img className="w-4 mx-2" src="/filter.svg" alt="" />
+                        <h3 className="text-xl font-semibold">Filter</h3>
+                        <button className="mx-2 absolute right-1" onClick={e=>{document.getElementById('menu').toggleAttribute('hidden')}}><img className="w-8" src="/options.svg" alt="" /></button>
+                    </div>
+                    <input className="bg-slate-600 w-3/4 mx-auto rounded-full px-4 py-2" type="search" placeholder="search" value={search} onChange={e=>setSearch(e.target.value)}/>
+                    <h4 className="my-4 text-right mx-2 text-2xl font-semibold">Hotels</h4>
+                    <div className="divide-y font-semibold">
+                        <button className="block w-full text-left text-lg py-2 hover:bg-gray-900">Alpha <img className="w-6 inline float-right" src="/right.svg" alt="" /></button>
+                        <button className="block w-full text-left text-lg py-2 hover:bg-gray-900">Highlands <img className="w-6 inline float-right" src="/right.svg" alt="" /></button>
+                        <button className="block w-full text-left text-lg py-2 hover:bg-gray-900">Mara <img className="w-6 inline float-right" src="/right.svg" alt="" /></button>
+                        <p></p>
+                    </div>
                 </div>
             </div>
         </div>

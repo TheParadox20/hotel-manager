@@ -6,7 +6,7 @@ export default function Table(){
     let [hotelData, setHotelData] = HotelData;
 
     return(
-        <table class="w-full text-sm text-left text-gray-400">
+        <table class="w-full text-sm text-left text-gray-400 table-auto">
             <thead class="text-xs text-gray-100 uppercase bg-blue-900 ">
                 <tr>
                     {

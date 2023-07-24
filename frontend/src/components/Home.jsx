@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from "react"
 import { Context } from "../ContextProvider"
 
-import Filter from "./Filter"
 import Bur from "./display/Bar"
 import Lyn from "./display/Line"
 import Pie from "./display/Pie"
@@ -22,6 +21,7 @@ function fetchData(){
 export default function Home(){
     let { HotelData, DisplayData } = useContext(Context);
     let [hotelData, setHotelData] = HotelData;
+    let [search,setSearch] = useState('');
 
     let [choice, setChoice] = useState("line");
 
@@ -76,7 +76,9 @@ export default function Home(){
                     <Table/>
                 </div>
                 <div className="flex flex-col order-first md:order-last items-center justify-center mb-4 rounded bg-gray-800 text-gray-50">
-                    <Filter />
+                    <h3>Filter</h3>
+                    <input type="search" placeholder="search" value={search} onChange={e=>setSearch(e.target.value)}/>
+                    <div>Hotels</div>
                 </div>
             </div>
         </div>

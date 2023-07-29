@@ -4,7 +4,7 @@ import { Context } from "./ContextProvider"
 import Home  from './components/Home'
 import Settings from "./components/Settings"
 import Activity from "./components/Activity"
-import Inbox from "./components/Inbox"
+import Download from "./components/Download"
 
 export default function Dashboard(){
     let { User } = useContext(Context);
@@ -108,7 +108,7 @@ export default function Dashboard(){
             <div class="sm:ml-64 bg-gray-700 h-screen overflow-y-scroll">
                 {page === 'home' && <Home />}
                     {page === 'settings' && <Settings />}
-                    {page === 'download' && <Inbox />}
+                    {page === 'download' && <Download />}
                     {page === 'activity' && <Activity />}
             </div>
         </div>

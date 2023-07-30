@@ -58,7 +58,7 @@ export function Data(){// data entry component
     let Waitstuff = useState('')
     let Target = useState('')
     let Actuals = useState('')
-    let Datestamp = useState('')
+    let Datestamp = useState([(new Date()).getFullYear(),(new Date()).getMonth(),(new Date()).getDate()])
 
     let submit = (e) => {
         e.preventDefault()

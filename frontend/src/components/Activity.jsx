@@ -7,12 +7,12 @@ export function Input({variable, level}){
     let [item, setIem] = variable;
     return(
         <>
-        <div className="bg-gray-800 py-4 px-2 pb-8">
+        <div className="bg-gray-800 py-4 px-6 pb-8">
             <p className="text-2xl text-right font-semibold">{level}</p>
             
             {
                 !(level.includes('amount'))?
-                <button id="dropdownSearchButton" data-dropdown-toggle="dropdownSearch" data-dropdown-placement="bottom" className="my-4 text-white text-lg focus:ring-4 focus:outline-none font-medium rounded-lg px-5 py-2.5 text-center inline-flex items-center bg-gray-800 hover:bg-gray-700 focus:ring-gray-800 w-full" type="button">
+                <button id="dropdownSearchButton" data-dropdown-toggle={level} data-dropdown-placement="bottom" className="my-4 text-white text-lg focus:ring-4 focus:outline-none font-medium rounded-lg px-5 py-2.5 text-center inline-flex items-center bg-gray-800 hover:bg-gray-700 focus:ring-gray-800 w-full" type="button">
                     Select {level}
                     <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
@@ -22,7 +22,7 @@ export function Input({variable, level}){
                 <div className="py-4"></div>
             }
 
-            <div id="dropdownSearch" className="z-10 hidden rounded-lg shadow w-60 bg-gray-900">
+            <div id={level} className="z-10 hidden rounded-lg shadow w-60 bg-gray-900">
                 <div className="p-3">
                 <label for="input-group-search" className="sr-only">Search</label>
                 <div className="relative">
@@ -64,17 +64,17 @@ export function Data(){// data entry component
         e.preventDefault()
     }
     return(
-        <div className="flex flex-col md:flex-row justify-around">
-            <div className="grid md:grid-cols-2 grid-cols-1 gap-8 w-full">
+        <div className="w-full flex flex-col lg:flex-row justify-evenly">
+            <div className="grid md:grid-cols-2 grid-cols-1 gap-8 w-full lg:ml-8">
                 <Input variable={Hotels} level='Hotel'/>
                 <Input variable={Sections} level='Section'/>
                 <Input variable={Supervisor} level='Supervisor'/>
                 <Input variable={Waitstuff} level='Waitstuff'/>
                 <Input variable={Target} level='Target amount'/>
                 <Input variable={Actuals} level='Actual amount'/>
-                <button className="md:col-span-2 flex md:w-1/2 w-full mx-auto justify-center rounded-md bg-blue-800 px-3 py-2 text-xl font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" onClick={e=>submit(e)}>Submit</button>   
+                <button className="md:col-span-2 flex lg:w-1/2 w-full mx-auto justify-center rounded-md bg-blue-800 px-3 py-2 text-xl font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" onClick={e=>submit(e)}>Submit</button>   
             </div>
-            <div className="w-full md:mx-4">
+            <div className="w-full lg:mx-4">
                 <Calender date={Datestamp}/>
             </div>
         </div>

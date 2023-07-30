@@ -33,37 +33,37 @@ export default function Home(){
     }, []);
 
     return (
-        <div class="p-4 rounded-lg border-gray-700 mt-14 md:overflow-y-none">
-            <div className="grid md:grid-cols-3 grid-cols-1 gap-4">
-                <div className="md:col-span-2 flex items-center justify-center mb-4 rounded bg-gray-800 h-96">
+        <div class="p-4 rounded-lg border-gray-700 mt-14 lg:overflow-y-none">
+            <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
+                <div className="lg:col-span-2 flex items-center justify-center mb-4 rounded bg-gray-800 h-96">
                     {choice === "bar" ? <Bur /> : null}
                     {choice === "line" ? <Lyn /> : null}
                     {choice === "pie" ? <Pie /> : null}
                     {choice === "donut" ? <Donut /> : null}
                     {choice === "stats" ? <Stats /> : null}
                 </div>
-                <div className="grid grid-cols-2 md:order-first gap-4 mb-4">
+                <div className="grid grid-cols-2 lg:order-first gap-4 mb-4">
                 {
                     [
                         <button onClick={e=>setChoice('line')} className="flex flex-col rounded bg-gray-800 hover:scale-105 hover:bg-gray-900">
-                            <p className="text-gray-100 text-left font-semibold py-4 md:py-8 md:text-xl text-sm pl-4">Total sales</p>
-                            <img className="block w-1/4 md:w-1/6 mx-auto pb-4 md:pb-0" src="/linechart.svg" alt="" />
+                            <p className="text-gray-100 text-left font-semibold py-4 lg:py-8 lg:text-xl text-sm pl-4">Total sales</p>
+                            <img className="block w-1/4 lg:w-1/6 mx-auto pb-4 lg:pb-0" src="/linechart.svg" alt="" />
                         </button>,
                         <button onClick={e=>setChoice('stats')} className="flex flex-col rounded bg-gray-800 hover:scale-105 hover:bg-gray-900">
-                            <p className="text-gray-100 text-left font-semibold py-4 md:py-8 md:text-xl text-sm pl-4">Stats</p>
-                            <p className="text-2xl block w-1/4 md:w-1/6 mx-auto pb-4 md:pb-0">O</p>
+                            <p className="text-gray-100 text-left font-semibold py-4 lg:py-8 lg:text-xl text-sm pl-4">Stats</p>
+                            <p className="text-2xl block w-1/4 lg:w-1/6 mx-auto pb-4 lg:pb-0">O</p>
                         </button>,
                         <button onClick={e=>setChoice('bar')} className="flex flex-col rounded bg-gray-800 hover:scale-105 hover:bg-gray-900">
-                            <p className="text-gray-100 text-left font-semibold py-4 md:py-8 md:text-xl text-sm pl-4">Variance</p>
-                            <img className="block w-1/4 md:w-1/6 mx-auto pb-4 md:pb-0" src={`/barchart.svg`} alt="" />
+                            <p className="text-gray-100 text-left font-semibold py-4 lg:py-8 lg:text-xl text-sm pl-4">Variance</p>
+                            <img className="block w-1/4 lg:w-1/6 mx-auto pb-4 lg:pb-0" src={`/barchart.svg`} alt="" />
                         </button>,
                         <button onClick={e=>setChoice('pie')} className="flex flex-col rounded bg-gray-800 hover:scale-105 hover:bg-gray-900">
-                            <p className="text-gray-100 text-left font-semibold py-4 md:py-8 md:text-xl text-sm pl-4">% Performance</p>
-                            <img className="block w-1/4 md:w-1/6 mx-auto pb-4 md:pb-0" src="/piechart.svg" alt="" />
+                            <p className="text-gray-100 text-left font-semibold py-4 lg:py-8 lg:text-xl text-sm pl-4">% Performance</p>
+                            <img className="block w-1/4 lg:w-1/6 mx-auto pb-4 lg:pb-0" src="/piechart.svg" alt="" />
                         </button>,
                         <button onClick={e=>setChoice('donut')} className="flex flex-col rounded bg-gray-800 hover:scale-105 hover:bg-gray-900">
-                            <p className="text-gray-100 text-left font-semibold py-4 md:py-8 md:text-xl text-sm pl-4">Avg. Sales</p>
-                            <img className="block w-1/4 md:w-1/6 mx-auto pb-4 md:pb-0" src="/donutchart.svg" alt="" />
+                            <p className="text-gray-100 text-left font-semibold py-4 lg:py-8 lg:text-xl text-sm pl-4">Avg. Sales</p>
+                            <img className="block w-1/4 lg:w-1/6 mx-auto pb-4 lg:pb-0" src="/donutchart.svg" alt="" />
                         </button>
                     ].map((item, index) => {
                         if(index!=['line','stats','bar','pie','donut'].indexOf(choice))  return item
@@ -71,11 +71,11 @@ export default function Home(){
                 }
                 </div>
             </div>
-            <div className="grid md:grid-cols-3 grid-cols-1 gap-4">
-                <div className="md:col-span-2 flex rounded bg-gray-800 overflow-x-scroll overflow-y-scroll md:h-2/3">
+            <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
+                <div className="lg:col-span-2 flex rounded bg-gray-800 overflow-x-scroll overflow-y-scroll lg:h-2/3">
                     <Table/>
                 </div>
-                <div className="flex flex-col order-first md:order-last  rounded bg-gray-800 text-gray-50 h-96 w-full md:w-3/4 mx-auto relative px-2">
+                <div className="flex flex-col order-first lg:order-last  rounded bg-gray-800 text-gray-50 h-96 w-full md:w-2/3 lg:w-3/4 mx-auto relative px-2">
                     <div className="flex my-4">
                         <img className="w-4 mx-2" src="/filter.svg" alt="" />
                         <h3 className="text-xl font-semibold">Filter</h3>
@@ -83,10 +83,10 @@ export default function Home(){
                     </div>
                     <input className="bg-slate-600 w-3/4 mx-auto rounded-full px-4 py-2" type="search" placeholder="search" value={search} onChange={e=>setSearch(e.target.value)}/>
                     <h4 className="my-4 text-right mx-2 text-2xl font-semibold">Hotels</h4>
-                    <div className="divide-y font-semibold">
-                        <button className="block w-full text-left text-lg py-2 hover:bg-gray-900">Alpha <img className="w-6 inline float-right" src="/right.svg" alt="" /></button>
-                        <button className="block w-full text-left text-lg py-2 hover:bg-gray-900">Highlands <img className="w-6 inline float-right" src="/right.svg" alt="" /></button>
-                        <button className="block w-full text-left text-lg py-2 hover:bg-gray-900">Mara <img className="w-6 inline float-right" src="/right.svg" alt="" /></button>
+                    <div className="divide-y font-semibold px-4">
+                        <button className="block w-full text-left text-lg py-4 hover:bg-gray-900">Alpha <img className="w-6 inline float-right" src="/right.svg" alt="" /></button>
+                        <button className="block w-full text-left text-lg py-4 hover:bg-gray-900">Highlands <img className="w-6 inline float-right" src="/right.svg" alt="" /></button>
+                        <button className="block w-full text-left text-lg py-4 hover:bg-gray-900">Mara <img className="w-6 inline float-right" src="/right.svg" alt="" /></button>
                         <p></p>
                     </div>
                 </div>

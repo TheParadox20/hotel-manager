@@ -27,7 +27,7 @@ export default function Calender({date}) {
 
     return (
       <>
-      <div class="flex items-center justify-center py-8 w-full md:w-2/3 mx-auto">
+      <div class="flex items-center justify-center py-8 w-full lg:w-2/3 mx-auto">
         <div class="w-full shadow-lg">
             <div class="md:p-8 p-5 dark:bg-gray-800 bg-white rounded-t">
                 <div class="px-4 flex items-center justify-between">
@@ -76,7 +76,7 @@ export default function Calender({date}) {
                                                     return (
                                                         <td key={dayIndex}>
                                                             <div class="w-full flex justify-center">
-                                                                <button onClick={e=>selectDate(e)} value={dayNumber} class={`focus:outline-none rounded-full w-8 h-8 flex items-center justify-center ${dayNumber==calender[2]?"bg-blue-500 text-white":"text-gray-800 dark:text-gray-100"}`}>
+                                                                <button onClick={e=>selectDate(e)} value={dayNumber} class={`focus:outline-none rounded-full w-8 h-8 flex items-center justify-center ${dayNumber==calender[2]?"bg-blue-800 text-white":"text-gray-800 dark:text-gray-100"}`}>
                                                                     {dayNumber>0&&dayNumber<=daysInMonth?dayNumber:""}
                                                                 </button>
                                                             </div>

@@ -19,6 +19,7 @@ import {
   );
   
   export const options = {
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'top',
@@ -30,18 +31,18 @@ import {
     },
   };
   
-  const labels = ['1st', 'February', 'March', 'April', 'May', 'June', 'July'];
+  const labels = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th'];
   
   export const data = {
     labels,
     datasets: [
       {
-        label: 'Dataset 1',
+        label: 'Actual',
         data: [20],
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
       {
-        label: 'Dataset 2',
+        label: 'Target',
         data: [27],
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
       },

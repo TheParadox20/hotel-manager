@@ -23,6 +23,7 @@ ChartJS.register(
 );
 
 const options = {
+  maintainAspectRatio: false,
   plugins: {
     legend: {
       display: true,
@@ -41,16 +42,22 @@ const data = {
   labels,
   datasets: [
     {
-      label: 'Lounge',
-      data: [65, 59, 70, 81, 56, 55, 40],
+      label: 'Alpha',
+      data: [65000, 59000, 70000, 81000, 56000, 55000, 40000],
       cubicInterpolationMode: 'monotone',
-      borderColor: 'rgb(75, 192, 192)',
+      borderColor: '#1d4ed8',
     },
     {
-      label: 'Balcony',
-      data: [28, 48, 40, 19, 86, 27, 90],
+      label: 'Highlands',
+      data: [28000, 48000, 40000, 79000, 86000, 27000, 90000],
       cubicInterpolationMode: 'monotone',
-      borderColor: 'rgb(75, 0, 192)',
+      borderColor: '#5b21b6',
+    },
+    {
+      label: 'Mara',
+      data: [48000, 58000, 65000, 79000, 76000, 87000, 80000],
+      cubicInterpolationMode: 'monotone',
+      borderColor: '#3730a3',
     },
   ],
 };

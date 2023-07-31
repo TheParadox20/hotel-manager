@@ -81,7 +81,7 @@ export default function Home(){
                         <h3 className="text-xl font-semibold">Filter</h3>
                         <button className="mx-2 absolute right-1" onClick={e=>{document.getElementById('menu').toggleAttribute('hidden')}}><img className="w-8" src="/options.svg" alt="" /></button>
                     </div>
-                    <input className="bg-slate-600 w-3/4 mx-auto rounded-full px-4 py-2" type="search" placeholder="search" value={search} onChange={e=>setSearch(e.target.value)}/>
+                    <input className="bg-slate-600 w-3/4 mx-auto rounded-full px-4 py-2 my-2" type="search" placeholder="search" value={search} onChange={e=>setSearch(e.target.value)}/>
                     <h4 className="my-4 text-right mx-2 text-2xl font-semibold">Hotels</h4>
                     <div className="divide-y font-semibold px-4">
                         <button className="block w-full text-left text-lg py-4 hover:bg-gray-900">Alpha <img className="w-6 inline float-right" src="/right.svg" alt="" /></button>

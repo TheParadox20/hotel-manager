@@ -22,7 +22,6 @@ function fetchData(){
 export default function Home(){
     let { HotelData } = useContext(Context);
     let [hotelData, setHotelData] = HotelData;
-    let [search,setSearch] = useState('');
 
     let [choice, setChoice] = useState("line");
 
@@ -48,23 +47,23 @@ export default function Home(){
                     [
                         <button onClick={e=>setChoice('line')} className="flex flex-col rounded bg-gray-800 hover:scale-105 hover:bg-gray-900">
                             <p className="text-gray-100 text-left font-semibold py-4 lg:py-8 lg:text-xl text-sm pl-4">Total sales</p>
-                            <img className="block w-1/4 lg:w-1/6 mx-auto pb-4 lg:pb-0" src="/linechart.svg" alt="" />
+                            <img className="block w-7 md:w-8 lg:w-10 mx-auto pb-4 lg:pb-0" src="/linechart.svg" alt="" />
                         </button>,
                         <button onClick={e=>setChoice('stats')} className="flex flex-col rounded bg-gray-800 hover:scale-105 hover:bg-gray-900">
                             <p className="text-gray-100 text-left font-semibold py-4 lg:py-8 lg:text-xl text-sm pl-4">Stats</p>
-                            <p className="text-2xl block w-1/4 lg:w-1/6 mx-auto pb-4 lg:pb-0">O</p>
+                            <p className="text-2xl block w-7 md:w-8 lg:w-10 mx-auto pb-4 lg:pb-0">O</p>
                         </button>,
                         <button onClick={e=>setChoice('bar')} className="flex flex-col rounded bg-gray-800 hover:scale-105 hover:bg-gray-900">
                             <p className="text-gray-100 text-left font-semibold py-4 lg:py-8 lg:text-xl text-sm pl-4">Variance</p>
-                            <img className="block w-1/4 lg:w-1/6 mx-auto pb-4 lg:pb-0" src={`/barchart.svg`} alt="" />
+                            <img className="block w-7 md:w-8 lg:w-10 mx-auto pb-4 lg:pb-0" src={`/barchart.svg`} alt="" />
                         </button>,
                         <button onClick={e=>setChoice('pie')} className="flex flex-col rounded bg-gray-800 hover:scale-105 hover:bg-gray-900">
                             <p className="text-gray-100 text-left font-semibold py-4 lg:py-8 lg:text-xl text-sm pl-4">% Performance</p>
-                            <img className="block w-1/4 lg:w-1/6 mx-auto pb-4 lg:pb-0" src="/piechart.svg" alt="" />
+                            <img className="block w-7 md:w-8 lg:w-10 mx-auto pb-4 lg:pb-0" src="/piechart.svg" alt="" />
                         </button>,
                         <button onClick={e=>setChoice('donut')} className="flex flex-col rounded bg-gray-800 hover:scale-105 hover:bg-gray-900">
                             <p className="text-gray-100 text-left font-semibold py-4 lg:py-8 lg:text-xl text-sm pl-4">Avg. Sales</p>
-                            <img className="block w-1/4 lg:w-1/6 mx-auto pb-4 lg:pb-0" src="/donutchart.svg" alt="" />
+                            <img className="block w-7 md:w-8 lg:w-10 mx-auto pb-4 lg:pb-0" src="/donutchart.svg" alt="" />
                         </button>
                     ].map((item, index) => {
                         if(index!=['line','stats','bar','pie','donut'].indexOf(choice))  return item

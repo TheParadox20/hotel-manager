@@ -11,7 +11,6 @@ const data = {
   datasets: [
     {
       data: [19, 3, 5, 2],
-      //backgroundColor for dark mode
       backgroundColor: [
         '#2563eb',
         '#4338ca',

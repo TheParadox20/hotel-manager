@@ -44,7 +44,7 @@ export function Input({variable, level}){
                 </ul>
             </div>
 
-            <input className="w-full py-2 px-1 rounded-md bg-gray-100 text-black" type={level.includes('amount')?'number':'text'} name="" id="" placeholder={level} value={item} onChange={e=>setIem(e.target.value)} />
+            <input className="w-full py-2 px-1 rounded-md bg-gray-300 text-black" type={level.includes('amount')?'number':'text'} name="" id="" placeholder={level} value={item} onChange={e=>setIem(e.target.value)} />
 
         </div>
         </>

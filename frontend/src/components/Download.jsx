@@ -3,7 +3,7 @@ import Filter from "./Filter"
 
 export default function Download(){
     return(
-        <div class="p-4 rounded-lg dark:border-gray-700 mt-14 text-gray-300">
+        <div class="p-4 rounded-lg border-gray-700 mt-14 text-gray-300">
             <div class="grid md:grid-rows-3 md:grid-flow-col gap-4 md:grid-cols-3 grid-cols-1">
                 <div class="row-span-3 md:col-span-2 overflow-x-scroll order-last md:order-first max-h-96"><Table/></div>
                 <div class="bg-gray-800 py-8 px-2">

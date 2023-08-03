@@ -7,6 +7,7 @@ import Pie from "./display/Pie"
 import Donut from "./display/Donut"
 import Table from "./display/Table"
 import Stats from "./display/Stats"
+import Filter from "./Filter"
 
 import {HotelData} from "../data.json"
 
@@ -19,7 +20,7 @@ function fetchData(){
 }
 
 export default function Home(){
-    let { HotelData, DisplayData } = useContext(Context);
+    let { HotelData } = useContext(Context);
     let [hotelData, setHotelData] = HotelData;
     let [search,setSearch] = useState('');
 
@@ -33,7 +34,7 @@ export default function Home(){
     }, []);
 
     return (
-        <div class="p-4 rounded-lg border-gray-700 mt-14 lg:overflow-y-none">
+        <div class="p-4 rounded-lg border-gray-700 mt-14 lg:mt-16 lg:overflow-y-none">
             <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
                 <div className="lg:col-span-2 flex items-center justify-center mb-4 rounded bg-gray-800 h-96">
                     {choice === "bar" ? <Bur /> : null}
@@ -71,25 +72,11 @@ export default function Home(){
                 }
                 </div>
             </div>
-            <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
-                <div className="lg:col-span-2 flex rounded bg-gray-800 overflow-x-scroll overflow-y-scroll lg:h-2/3">
+            <div className="grid lg:grid-cols-3 grid-cols-1 gap-4 lg:mt-6">
+                <div className="lg:col-span-2 flex rounded bg-gray-800 overflow-x-scroll overflow-y-scroll max-h-96">
                     <Table/>
                 </div>
-                <div className="flex flex-col order-first lg:order-last  rounded bg-gray-800 text-gray-50 h-96 w-full md:w-2/3 lg:w-3/4 mx-auto relative px-2">
-                    <div className="flex my-4">
-                        <img className="w-4 mx-2" src="/filter.svg" alt="" />
-                        <h3 className="text-xl font-semibold">Filter</h3>
-                        <button className="mx-2 absolute right-1" onClick={e=>{document.getElementById('menu').toggleAttribute('hidden')}}><img className="w-8" src="/options.svg" alt="" /></button>
-                    </div>
-                    <input className="bg-slate-600 w-3/4 mx-auto rounded-full px-4 py-2 my-2" type="search" placeholder="search" value={search} onChange={e=>setSearch(e.target.value)}/>
-                    <h4 className="my-4 text-right mx-2 text-2xl font-semibold">Hotels</h4>
-                    <div className="divide-y font-semibold px-4">
-                        <button className="block w-full text-left text-lg py-4 hover:bg-gray-900">Alpha <img className="w-6 inline float-right" src="/right.svg" alt="" /></button>
-                        <button className="block w-full text-left text-lg py-4 hover:bg-gray-900">Highlands <img className="w-6 inline float-right" src="/right.svg" alt="" /></button>
-                        <button className="block w-full text-left text-lg py-4 hover:bg-gray-900">Mara <img className="w-6 inline float-right" src="/right.svg" alt="" /></button>
-                        <p></p>
-                    </div>
-                </div>
+                <Filter/>
             </div>
         </div>
     )

@@ -2,6 +2,9 @@ import { useEffect } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 
+import { useContext } from 'react';
+import { Context } from '../../ContextProvider';
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const data = {
@@ -39,6 +42,10 @@ const options = {
     },
   };
 export default function Donut() {
+  let { Filters, HotelData } = useContext(Context);
+  let [filter, setFilter] = Filters;
+  let [hotelData, setHotelData] = HotelData;
+
   return (
       <Doughnut data={data} options={options} />
   )

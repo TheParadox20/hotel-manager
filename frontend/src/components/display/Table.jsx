@@ -2,12 +2,13 @@ import { useContext } from "react";
 import { Context } from "../../ContextProvider";
 
 export default function Table(){
-    let { HotelData } = useContext(Context);
+    let { HotelData, Filters } = useContext(Context);
     let [hotelData, setHotelData] = HotelData;
+    let [filter, setFilter] = Filters;
 
     return(
         <table class="w-full text-sm text-left text-gray-400 table-auto">
-            <thead class="text-xs text-gray-100 uppercase bg-blue-900 ">
+            <thead class="text-xs text-gray-100 uppercase bg-blue-900 sticky top-0 h-min">
                 <tr>
                     {
                         ["Hotel","Section","Supervisor","waitstuff","Target","actual","timestamp"].map((col)=>{return(
@@ -19,16 +20,24 @@ export default function Table(){
                 </tr>
             </thead>
             <tbody>
-                {
-                    hotelData.map((row, index) => {
-                        return (<tr key={index} class="border-b bg-gray-900 border-gray-700">
+                {//filter the data based on the filter
+                    hotelData.filter((item)=>{
+                        let flag = true;
+                        filter.depth.forEach((depth,index)=>{
+                            if(item[index]!=depth) flag = false
+                        })
+                        return flag
+                    }
+                    ).map((item)=>{return(
+                        <tr class="bg-gray-800 border-b border-gray-700">
                             {
-                                row.map((data, index) => {
-                                    return <td class="px-6 py-4">{data}</td>
-                                })
-                            }
-                        </tr>)}
-                    )
+                                item.map((col)=>{return(
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        {col}
+                                    </td>
+                            )})}
+                        </tr>
+                    )})
                 }
             </tbody>
         </table>

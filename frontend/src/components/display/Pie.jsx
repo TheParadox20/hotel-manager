@@ -7,6 +7,9 @@ import {
 } from 'chart.js';
 import { PolarArea } from 'react-chartjs-2';
 
+import { useContext } from 'react';
+import { Context } from '../../ContextProvider';
+
 ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
 
 export const options = {
@@ -41,6 +44,10 @@ export const data = {
 };
   
   export default function Pie() {
+    let { Filters, HotelData } = useContext(Context);
+    let [filter, setFilter] = Filters;
+    let [hotelData, setHotelData] = HotelData;
+
     return (
         <PolarArea data={data} options={options} />
     );

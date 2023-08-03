@@ -63,8 +63,10 @@ const data = {
 };
 
 export default function Lyn() {
-  let { DisplayData } = useContext(Context);
-  let [displayData, setDisplayData] = DisplayData;
+  let { Filters, HotelData } = useContext(Context);
+  let [filter, setFilter] = Filters;
+  let [hotelData, setHotelData] = HotelData;
+
   return(
         <Line options={options} data={data} />
   )

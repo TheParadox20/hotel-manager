@@ -34,12 +34,12 @@ export function Input({variable, level}){
                     <input type="text" id="input-group-search" className="block w-full p-2 pl-10 text-sm border rounded-lg bg-gray-600 border-gray-500 placeholder-gray-400 text-white focus:ring-gray-500 focus:border-gray-500" placeholder={`Search ${level}`}/>
                 </div>
                 </div>
-                <ul className="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-200" aria-labelledby="dropdownSearchButton">
+                <ul className="px-3 pb-3 overflow-y-auto text-sm text-gray-200" aria-labelledby="dropdownSearchButton">
                     <li>
-                        <button className="w-full text-left py-2 ml-2 text-sm font-medium rounded text-gray-300 hover:bg-gray-600">Donald Bail</button>
+                        <button className="w-full text-left py-2 ml-2 text-sm font-medium rounded text-gray-300 hover:bg-gray-600" value={'Donald duck'} onClick={e=>setIem(e.target.value)}>Donald duck</button>
                     </li>
                     <li>
-                        <button className="w-full text-left py-2 ml-2 text-sm font-medium rounded text-gray-300 hover:bg-gray-600">Joseph Mcfall</button>
+                        <button className="w-full text-left py-2 ml-2 text-sm font-medium rounded text-gray-300 hover:bg-gray-600" value={'Samson Me'} onClick={e=>setIem(e.target.value)}>Samson Me</button>
                     </li>
                 </ul>
             </div>

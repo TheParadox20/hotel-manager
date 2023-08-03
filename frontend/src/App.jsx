@@ -9,7 +9,7 @@ export default function App() {
   return (
     <>
       {
-        user ? <Dashboard /> : <Login />
+        true ? <Dashboard /> : <Login />
       }
     </>
   )

@@ -1,10 +1,14 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
+import { Context } from "../ContextProvider"
 import { initFlowbite } from 'flowbite'
 
 import Calender from "./Calender"
 
 export function Input({variable, level}){
-    let [item, setIem] = variable;
+    let { HotelData } = useContext(Context);
+    let [hotelData, setHotelData] = HotelData;
+    let [choice, setChoice] = variable;
+    let [search,setSearch] = useState('');
     return(
         <>
         <div className="bg-gray-800 py-4 px-6 pb-8">
@@ -31,20 +35,24 @@ export function Input({variable, level}){
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                     </svg>
                     </div>
-                    <input type="text" id="input-group-search" className="block w-full p-2 pl-10 text-sm border rounded-lg bg-gray-600 border-gray-500 placeholder-gray-400 text-white focus:ring-gray-500 focus:border-gray-500" placeholder={`Search ${level}`}/>
+                    <input type="search" id="input-group-search" className="block w-full p-2 pl-10 text-sm border rounded-lg bg-gray-600 border-gray-500 placeholder-gray-400 text-white focus:ring-gray-500 focus:border-gray-500" placeholder={`Search ${level}`} value={search} onChange={e=>setSearch(e.target.value)}/>
                 </div>
                 </div>
                 <ul className="px-3 pb-3 overflow-y-auto text-sm text-gray-200" aria-labelledby="dropdownSearchButton">
-                    <li>
-                        <button className="w-full text-left py-2 ml-2 text-sm font-medium rounded text-gray-300 hover:bg-gray-600" value={'Donald duck'} onClick={e=>setIem(e.target.value)}>Donald duck</button>
-                    </li>
-                    <li>
-                        <button className="w-full text-left py-2 ml-2 text-sm font-medium rounded text-gray-300 hover:bg-gray-600" value={'Samson Me'} onClick={e=>setIem(e.target.value)}>Samson Me</button>
-                    </li>
+                    {
+                        !(level.includes('amount'))?
+                        [...new Set(hotelData.map(item => item[(['Hotel','Section','Supervisor','Waitstuff'].indexOf(level))]))].map((options, index) => {
+                            if(options.toLowerCase().includes(search.toLowerCase())) return(<li>
+                                <button className="w-full text-left py-2 ml-2 text-sm font-medium rounded text-gray-300 hover:bg-gray-600" value={options} onClick={e=>setChoice(e.target.value)}>{options}</button>
+                            </li>)
+                        })
+                        :
+                        null
+                    }
                 </ul>
             </div>
 
-            <input className="w-full py-2 px-1 rounded-md bg-gray-300 text-black" type={level.includes('amount')?'number':'text'} name="" id="" placeholder={level} value={item} onChange={e=>setIem(e.target.value)} />
+            <input className="w-full py-2 px-1 rounded-md bg-gray-300 text-black" type={level.includes('amount')?'number':'text'} name="" id="" placeholder={level} value={choice} onChange={e=>setChoice(e.target.value)} />
 
         </div>
         </>

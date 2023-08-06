@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useState, useEffect } from "react"
 import { Context } from "../ContextProvider"
 
 export default function Filter(){
@@ -6,8 +6,17 @@ export default function Filter(){
     let [hotelData, setHotelData] = HotelData;
     let [filter, setFilter] = Filters;
     let [search,setSearch] = useState('');
+    let start = hotelData.map(row=>row[(filter.depth.length)-1]).indexOf(filter.depth[(filter.depth.length)-1]);
+    let end = hotelData.map(row=>row[(filter.depth.length)-1]).lastIndexOf(filter.depth[(filter.depth.length)-1])+1;
 
     console.log('filter :: ',filter);
+    console.log('Start :: ',start);
+    console.log('End :: ',end);
+
+    useEffect(()=>{
+        setFilter({...filter,start:start,end:end});
+    },[start,end]);
+    
 
     return(
         <>
@@ -20,7 +29,7 @@ export default function Filter(){
             <input className="bg-slate-600 w-3/4 mx-auto rounded-full px-4 py-2 my-2" type="search" placeholder="search" value={search} onChange={e=>setSearch(e.target.value)}/>
             <div className="flex justify-between">
                 {
-                    filter.depth.length > 0 ? <button className="ml-4 w-6" onClick={e=>setFilter({...filter,depth:filter.depth.slice(0,-1)})}><img className="w-full" src="/back.svg"/></button> : null
+                    filter.depth.length > 0 ? <button className="ml-4 w-6" onClick={e=>{setFilter({...filter,depth:filter.depth.slice(0,-1)});setSearch('')}}><img className="w-full" src="/back.svg"/></button> : null
                 }
                 <h4 className="w-full my-4 text-right mx-2 text-2xl font-semibold">
                     {
@@ -30,8 +39,8 @@ export default function Filter(){
             </div>
             <div className="divide-y font-semibold px-4">
                 {
-                    [...new Set(hotelData.map(item => item[(filter.depth.length)]))].map((item, index) => {
-                        if(item.toLowerCase().includes(search.toLowerCase())) return <button className="block w-full text-left text-lg py-4 hover:bg-gray-900" value={item} onClick={e=>setFilter({...filter,depth:[...filter.depth,e.target.value]})}>{item} <img className="w-6 inline float-right" src="/right.svg" alt="" /></button>
+                    [...new Set(hotelData.slice(start<0?0:start,end<0?hotelData.length:end).map(item => item[(filter.depth.length)]))].map((options, index) => {
+                        if(filter.depth.length<4) if(options.toLowerCase().includes(search.toLowerCase())) return <button className="block w-full text-left text-lg py-4 hover:bg-gray-900" value={options} onClick={e=>setFilter({...filter,depth:[...filter.depth,e.target.value]})}>{options} <img className="w-6 inline float-right" src="/right.svg" alt="" /></button>
                     })
                 }
                 <p></p>

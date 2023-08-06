@@ -41,7 +41,7 @@ export function Input({variable, level}){
                 <ul className="px-3 pb-3 overflow-y-auto text-sm text-gray-200" aria-labelledby="dropdownSearchButton">
                     {
                         !(level.includes('amount'))?
-                        [...new Set(hotelData.map(item => item[(['Hotel','Section','Supervisor','Waitstuff'].indexOf(level))]))].map((options, index) => {
+                        [...new Set(hotelData.slice(hotelData.indexOf()<0?0:hotelData.indexOf(),hotelData.lastIndexOf()<0?hotelData.length:hotelData.lastIndexOf()).map(item => item[(['Hotel','Section','Supervisor','Waitstuff'].indexOf(level))]))].map((options, index) => {
                             if(options.toLowerCase().includes(search.toLowerCase())) return(<li>
                                 <button className="w-full text-left py-2 ml-2 text-sm font-medium rounded text-gray-300 hover:bg-gray-600" value={options} onClick={e=>setChoice(e.target.value)}>{options}</button>
                             </li>)

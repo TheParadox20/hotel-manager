@@ -35,37 +35,49 @@ const options = {
     },
   },
 };
-
-const labels = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th'];
-
-const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Alpha',
-      data: [65000, 59000, 70000, 81000, 56000, 55000, 40000],
-      cubicInterpolationMode: 'monotone',
-      borderColor: '#1d4ed8',
-    },
-    {
-      label: 'Highlands',
-      data: [28000, 48000, 40000, 79000, 86000, 27000, 90000],
-      cubicInterpolationMode: 'monotone',
-      borderColor: '#5b21b6',
-    },
-    {
-      label: 'Mara',
-      data: [48000, 58000, 65000, 79000, 76000, 87000, 80000],
-      cubicInterpolationMode: 'monotone',
-      borderColor: '#3730a3',
-    },
-  ],
-};
-
+let colours = ['#1d4ed8','#5b21b6','#3730a3','']
 export default function Lyn() {
   let { Filters, HotelData } = useContext(Context);
   let [filter, setFilter] = Filters;
   let [hotelData, setHotelData] = HotelData;
+
+  let labels = [...new Set(hotelData.map(item=>item[item.length-1]))];
+
+  let compute = ()=>{
+    let data = []
+    let sum = (item)=>{//item==selection
+      let totals = []
+      for(let i=0;i<labels.length;i++){
+        let total=0
+        console.log(item,labels[i])
+        hotelData.forEach(row => {
+          if(row[filter.depth[0]]==item && row[row.length-1]==labels[i]) total+=row[5]
+        });
+        totals.push(total)
+      }
+      console.log('Totals :: ',totals)
+      return totals
+    }
+    let items = filter.depth.length==1?[...new Set(hotelData.map(item=>item[filter.depth[0]]))]:[filter.depth[1]];
+    for(let i=0;i<items.length;i++){
+      data.push(
+        {
+          label: items[i],
+          data: sum(items[i]),
+          cubicInterpolationMode: 'monotone',
+          borderColor: colours[i],
+        }
+      );
+    }
+    console.log(data)
+    return data
+  }
+
+
+const data = {
+  labels,
+  datasets: compute(),
+};
 
   return(
         <Line options={options} data={data} />

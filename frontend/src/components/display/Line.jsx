@@ -49,27 +49,24 @@ export default function Lyn() {
       let totals = []
       for(let i=0;i<labels.length;i++){
         let total=0
-        console.log(item,labels[i])
         hotelData.forEach(row => {
           if(row[filter.depth[0]]==item && row[row.length-1]==labels[i]) total+=row[5]
         });
         totals.push(total)
       }
-      console.log('Totals :: ',totals)
       return totals
     }
     let items = filter.depth.length==1?[...new Set(hotelData.map(item=>item[filter.depth[0]]))]:[filter.depth[1]];
     for(let i=0;i<items.length;i++){
       data.push(
         {
-          label: items[i],
+          label: items[i]==null?'All Hotels':items[i],
           data: sum(items[i]),
           cubicInterpolationMode: 'monotone',
           borderColor: colours[i],
         }
       );
     }
-    console.log(data)
     return data
   }
 

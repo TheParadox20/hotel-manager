@@ -26,29 +26,42 @@ export const options = {
   },
 };
 
-export const data = {
-  labels: ['Alpha', 'Highlans', 'Mara'],
-  datasets: [
-    {
-      data: [88, 91, 83],
-      backgroundColor: [
-        '#2563eb',
-        '#4338ca',
-        '#172554',
-        '#172554',
-        '#1d4ed8',
-        '#1d4ed8',
-      ],
-    },
-  ],
-};
   
-  export default function Pie() {
-    let { Filters, HotelData } = useContext(Context);
-    let [filter, setFilter] = Filters;
-    let [hotelData, setHotelData] = HotelData;
+export default function Pie() {
+  let { Filters, HotelData } = useContext(Context);
+  let [filter, setFilter] = Filters;
+  let [hotelData, setHotelData] = HotelData;
 
-    return (
-        <PolarArea data={data} options={options} />
-    );
+  let labels = [...new Set(hotelData.map(item=>item[filter.depth.length==0?0:filter.depth[0]]))];
+
+  let compute = ()=>{
+    let data = []
+    for(let i=0;i<labels.length;i++){
+      let targets = 0
+      let actuals = 0
+      hotelData.forEach(row => {
+        if(row[filter.depth.length==0?0:filter.depth[0]]==labels[i]){
+          targets+=row[4]
+          actuals+=row[5]
+        }
+      });
+      data.push((actuals/(targets==0?1:targets) * 100).toFixed(2))
+    }
+    return data
   }
+
+  let data = {
+    labels: labels,
+    datasets: [
+      {
+        data: compute(),
+        backgroundColor: ['#2563eb','#4338ca','#172554','#172554','#1d4ed8','#1d4ed8',],
+        borderColor: ['#2563eb','#4338ca','#172554','#172554','#1d4ed8','#1d4ed8',],
+      },
+    ],
+  };
+
+  return (
+      <PolarArea data={data} options={options} />
+  );
+}

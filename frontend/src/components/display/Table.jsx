@@ -60,7 +60,7 @@ export default function Table(){
                 {
                     filter.depth.length==0?
                     hotelData.map(row=>{
-                        row.splice(6,0,...[(row[5]-row[4]),(row[5]/row[4]*100).toFixed(2)+'%'])
+                        row.length<9?row.splice(6,0,...[(row[5]-row[4]),(row[5]/row[4]*100).toFixed(2)+'%']):row
                         return(
                          <tr class="bg-gray-800 border-b border-gray-700">
                              {row.map(col=>{

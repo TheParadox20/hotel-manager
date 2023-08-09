@@ -16,8 +16,8 @@ export default function Table(){
                     actuals+=row[5]
                 }
             });
-            let variance = targets-actuals
-            let performance = (variance/(targets==0?1:targets) * 100).toFixed(2)+'%'
+            let variance = actuals-targets
+            let performance = (actuals/(targets==0?1:targets) * 100).toFixed(2)+'%'
             return [targets,actuals,variance,performance]
         }
         let dates = [...new Set(hotelData.map(item=>item[item.length-1]))];

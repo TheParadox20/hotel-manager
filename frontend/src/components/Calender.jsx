@@ -1,10 +1,8 @@
 export default function Calender({date}) {
     let [calender, setCalender] = date
 
-    console.log(calender);
     let firstDay = (new Date(calender[0], calender[1])).getDay();//index of first day of month, sunday at index 0
     let daysInMonth = 32 - new Date(calender[0],calender[1],32).getDate();//jan at index 0
-    console.log(firstDay,daysInMonth);
 
     let selectDate = (e)=>{
         e.preventDefault()

@@ -11,9 +11,8 @@ export function Input({variable, level}){
         <>
         <div className="bg-gray-800 py-4 px-6 pb-8">
             <p className="text-2xl text-right font-semibold">{level}</p>
-            
             {
-                !(level.includes('amount'))?
+                (level=="Hotel")?
                 <button id="dropdownSearchButton" data-dropdown-toggle={level} data-dropdown-placement="bottom" className="my-4 text-white text-lg focus:ring-4 focus:outline-none font-medium rounded-lg px-5 py-2.5 text-center inline-flex items-center bg-gray-800 hover:bg-gray-700 focus:ring-gray-800 w-full" type="button">
                     Select {level}
                     <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
@@ -38,7 +37,7 @@ export function Input({variable, level}){
                 </div>
                 <ul className="px-3 pb-3 overflow-y-auto text-sm text-gray-200" aria-labelledby="dropdownSearchButton">
                     {
-                        (level.includes('Hotel'))?
+                        (level=="Hotel")?
                         [...new Set(hotelData.map(item => item[0]))].map((options, index) => {
                             if(options.toLowerCase().includes(search.toLowerCase())) return(<li>
                                 <button className="w-full text-left py-2 ml-2 text-sm font-medium rounded text-gray-300 hover:bg-gray-600" value={options} onClick={e=>setChoice(e.target.value)}>{options}</button>
@@ -57,11 +56,10 @@ export function Input({variable, level}){
 
 export default function Inventory(){// data entry component
     let Hotels = useState('')
-    let Sections = useState('')
-    let Supervisor = useState('')
-    let Waitstuff = useState('')
-    let Target = useState('')
-    let Actuals = useState('')
+    let Purchases = useState('')
+    let Sales = useState('')
+    let opening = useState('')
+    let closing = useState('')
     let Datestamp = useState([(new Date()).getFullYear(),(new Date()).getMonth(),(new Date()).getDate()])
 
     let submit = (e) => {
@@ -69,10 +67,14 @@ export default function Inventory(){// data entry component
     }
     return(
         <div className="w-full flex flex-col lg:flex-row justify-evenly">
-            <div className="flex flex-col gap-8 lg:w-1/2 mx-auto lg:ml-8">
-                <Input variable={Hotels} level='Hotel'/>
-                <Input variable={Target} level='Target amount'/>
-                <Input variable={Actuals} level='Actual amount'/>
+            <div className="grid md:grid-cols-2 grid-cols-1 gap-8 w-full lg:ml-8">
+                <div className=" md:col-span-2 md:w-3/4 lg:w-1/2 md:mx-auto">
+                    <Input variable={Hotels} level='Hotel'/>
+                </div>
+                <Input variable={Purchases} level='Purchases'/>
+                <Input variable={Sales} level='Sales'/>
+                <Input variable={opening} level='Opening Stock'/>
+                <Input variable={closing} level='Closing Stock'/>
                 <button className="md:col-span-2 flex lg:w-3/4 w-full mx-auto justify-center rounded-md bg-blue-800 px-3 py-2 text-xl font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" onClick={e=>submit(e)}>Submit</button>   
             </div>
             <div className="w-full lg:mx-4">

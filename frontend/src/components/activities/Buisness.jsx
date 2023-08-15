@@ -1,7 +1,7 @@
 export default function Buisnesses(){
     return(
         <div>
-            <h1>Buisnesses</h1>
+            <h1>Businesses</h1>
         </div>
     )
 }

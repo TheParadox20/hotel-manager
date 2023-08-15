@@ -33,7 +33,7 @@ export default function Table(){
 
     return(
         <table class="w-full text-sm text-left text-gray-400 table-auto">
-            <thead class="text-xs text-gray-100 uppercase bg-blue-900 sticky top-0 h-min">
+            <thead class="text-xs text-gray-100 uppercase bg-blue-900 sticky top-0">
                 <tr>
                     {
                         filter.depth.length==0?

@@ -6,6 +6,8 @@ export default function Table(){
     let [hotelData, setHotelData] = HotelData;
     let [filter, setFilter] = Filters;
 
+    console.log(hotelData.length)
+
     let compute = ()=>{//creates new 2d array with the required data
         let sum = (selection,date)=>{
             let targets = 0
@@ -92,6 +94,18 @@ export default function Table(){
                          </tr>
                         )
                     })
+                }
+                {
+                    10-hotelData.length>0?
+                    [...Array((10-hotelData.length))].map((item,index)=>{
+                        console.log(index)
+                        return(
+                            <tr class="bg-gray-800 border-b border-gray-700">
+                                <td class="px-6 py-4 whitespace-nowrap"></td>
+                            </tr>
+                        )
+                    }):
+                    null
                 }
             </tbody>
         </table>

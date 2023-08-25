@@ -85,6 +85,15 @@ export default function Sales(){// data entry component
             })
         }).then(res => res.json()).then(data => {
             console.log(data)
+            if(data.status=="success"){
+                Hotels[1]('')
+                Sections[1]('')
+                Supervisor[1]('')
+                Waitstuff[1]('')
+                Target[1]('')
+                Actuals[1]('')
+                alert('Data submitted successfully')
+            }
         }).catch(err => {
             console.log(err)
         })

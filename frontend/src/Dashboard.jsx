@@ -5,6 +5,7 @@ import Home  from './components/Home'
 import Settings from "./components/Settings"
 import Activity from "./components/Activity"
 import Download from "./components/Download"
+import {baseURL} from "./data.json"
 
 export default function Dashboard(){
     let { User } = useContext(Context);
@@ -17,7 +18,17 @@ export default function Dashboard(){
     },[])
     let logout = (e) => {
         e.preventDefault()
-        setUser(null);
+        fetch(`${baseURL}/logout`).then(res => res.json()).then(data => {
+            console.log(data)
+            if(data.status=="success"){
+                localStorage.removeItem('username')
+                localStorage.removeItem('email')
+                localStorage.removeItem('token')
+                setUser(null)
+            }
+        }).catch(err => {
+            console.log(err)
+        })
     }
     let toggle = (e) => {
         e.preventDefault()
@@ -53,10 +64,10 @@ export default function Dashboard(){
                         <div className="z-50 hidden my-4 text-base list-none divide-y rounded shadow bg-gray-700 divide-gray-600" id="dropdown-user">
                         <div className="px-4 py-3" role="none">
                             <p className="text-sm  text-white" role="none">
-                            {localStorage.getItem('username')}
+                            {user.username}
                             </p>
                             <p className="text-sm font-medium truncate text-gray-300" role="none">
-                            {localStorage.getItem('email')}
+                            {user.email}
                             </p>
                         </div>
                         <ul className="py-1" role="none">

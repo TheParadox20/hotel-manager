@@ -36,7 +36,7 @@ export default function App() {
   return (
     <>
       {
-        true ? <Dashboard /> : <Login />
+        authorized ? <Dashboard /> : <Login />
       }
     </>
   )

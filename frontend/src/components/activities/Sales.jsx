@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react"
 import { Context } from "../../ContextProvider"
+import {baseURL} from "../../data.json"
 import Calender from "../Calender"
 
 export function Input({variable, level}){
@@ -68,6 +69,25 @@ export default function Sales(){// data entry component
 
     let submit = (e) => {
         e.preventDefault()
+        fetch(`${baseURL}/sales`,{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                hotel:Hotels[0],
+                section:Sections[0],
+                supervisor:Supervisor[0],
+                waitstuff:Waitstuff[0],
+                target:Target[0],
+                actual:Actuals[0],
+                datestamp:Datestamp[0]
+            })
+        }).then(res => res.json()).then(data => {
+            console.log(data)
+        }).catch(err => {
+            console.log(err)
+        })
     }
     return(
         <div className="w-full flex flex-col lg:flex-row justify-evenly">

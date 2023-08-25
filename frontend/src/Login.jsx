@@ -7,37 +7,35 @@ export default function Login() {
     let [user, setUser] = User;
     let [signup, setSignup] = useState(false)
     let [username, setUsername] = useState('')
+    let [name, setName] = useState('')
     let [email, setEmail] = useState('')
+    let [role, setRole] = useState(1)
     let [password, setPassword] = useState('')
-    let [key, setKey] = useState('')
+    let [phone, setPhone] = useState('')
 
 
     let login = (e) => {
         e.preventDefault()
-        if(username==password) {
-            setUser(username)
-            console.log('login')
-        }
         
-        // fetch(`${baseURL}/login`, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         username:username,
-        //         password:password
-        //     })
-        // }).then(res => res.json()).then(data => {
-        //     console.log(data)
-        //     if(data.status === 'success'){
-        //         localStorage.setItem('username',data.username)
-        //         localStorage.setItem('email',data.email)
-        //         localStorage.setItem('address',data.address)
-        //     }else if(data.status === 'error'){
-        //         alert(data.message)
-        //     }
-        // })
+        fetch(`${baseURL}/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username:username,
+                password:password
+            })
+        }).then(res => res.json()).then(data => {
+            console.log(data)
+            if(data.status === 'success'){
+                console.log('login')
+                localStorage.setItem('user',JSON.stringify({username:data.response.username,role:data.response.role,email:data.response.email}))
+                setUser({username:data.response.username,role:data.response.role,email:data.response.email})
+            }else if(data.status === 'error'){
+                alert(data.response)
+            }
+        })
     }
     let signUp = (e) => {
         e.preventDefault()
@@ -50,8 +48,10 @@ export default function Login() {
             body: JSON.stringify({
                 username:username,
                 password:password,
-                pk:key,
-                email:email
+                name:name,
+                email:email,
+                role:role,
+                phone:phone
             })
         }).then(res => res.json()).then(data => {
             console.log(data)
@@ -89,6 +89,23 @@ export default function Login() {
                 {signup && (
                         <>
                             <div>
+                                <label htmlFor="name" className="block text-sm font-medium leading-6">
+                                    Full name
+                                </label>
+                                <div className="mt-2">
+                                    <input
+                                    id="name"
+                                    name="name"
+                                    type="text"
+                                    autoComplete="name"
+                                    value={name}
+                                    onChange={(e)=>setName(e.target.value)}
+                                    className="pl-2 text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-0 sm:text-sm sm:leading-6"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
                                 <label htmlFor="email" className="block text-sm font-medium leading-6">
                                     Email address
                                 </label>
@@ -97,28 +114,41 @@ export default function Login() {
                                     id="email"
                                     name="email"
                                     type="email"
-                                    autoComplete="email"
+                                    autoComplete="mail"
                                     value={email}
                                     onChange={(e)=>setEmail(e.target.value)}
-                                    className="text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-0 sm:text-sm sm:leading-6"
+                                    className="pl-2 text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-0 sm:text-sm sm:leading-6"
                                     />
                                 </div>
-                                </div>
+                            </div>
 
-                                <div>
-                                <label htmlFor="key" className="block text-sm font-medium leading-6">
+                            <div>
+                                <label htmlFor="phone" className="block text-sm font-medium leading-6">
                                     Phone number
                                 </label>
                                 <div className="mt-2">
                                     <input
-                                    id="key"
-                                    name="key"
+                                    id="phone"
+                                    name="phone"
                                     type="tel"
-                                    value={key}
-                                    onChange={(e)=>setKey(e.target.value)}
-                                    className="text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-0 sm:text-sm sm:leading-6"
+                                    value={phone}
+                                    onChange={(e)=>setPhone(e.target.value)}
+                                    className="pl-2 text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-0 sm:text-sm sm:leading-6"
                                     />
                                 </div>
+                            </div>
+                            <div>
+                                <label htmlFor="key" className="block text-sm font-medium leading-6">
+                                    Role
+                                </label>
+                                <select className="pl-2 text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-0 sm:text-sm sm:leading-6" value={role} onChange={event =>{setRole(event.target.value)}} >
+                                    <option value={1}>Sales executive</option>
+                                    <option value={3}>Clerk</option>
+                                    <option value={2}>Accountant</option>
+                                    <option value={4}>Supervisor</option>
+                                    <option value={5}>Manager</option>
+                                    <option value={6}>Admin</option>
+                                </select>
                             </div>
                         </>
                 )}
@@ -136,12 +166,12 @@ export default function Login() {
                     <input
                     id="password"
                     name="password"
-                    type="password"
+                    type={true?"password":"text"}
                     autoComplete="current-password"
                     required
                     value={password}
                     onChange={(e)=>setPassword(e.target.value)}
-                    className="text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="pl-2 text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                 </div>
                 </div>

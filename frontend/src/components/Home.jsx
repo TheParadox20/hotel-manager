@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from "react"
 import { Context } from "../ContextProvider"
+import {baseURL} from "../data.json"
 
 import Bur from "./display/Bar"
 import Lyn from "./display/Line"
@@ -9,16 +10,6 @@ import Table from "./display/Table"
 import Stats from "./display/Stats"
 import Filter from "./Filter"
 
-import {HotelData} from "../data.json"
-
-function fetchData(){
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(HotelData);
-        }, 1000);
-    })
-}
-
 export default function Home(){
     let { HotelData } = useContext(Context);
     let [hotelData, setHotelData] = HotelData;
@@ -26,9 +17,9 @@ export default function Home(){
     let [choice, setChoice] = useState("line");
 
     useEffect(() => {
-        fetchData().then((data) => {
-            // console.log('data :: ',data)
-            setHotelData(data)
+        fetch(`${baseURL}/getsales`).then(res => res.json()).then(data => {
+            console.log('fetching :: ',data)
+            setHotelData(data.sales)
         })
     }, []);
 

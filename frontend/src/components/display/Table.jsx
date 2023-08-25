@@ -59,7 +59,12 @@ export default function Table(){
             <tbody>
                 {
                     filter.depth.length==0?
-                    hotelData.map(row=>{
+                    hotelData.sort((a,b)=>{
+                        typeof(a[filter.sort])=='string'?
+                        filter.descending?a[filter.sort].localeCompare(b[filter.sort]):b[filter.sort].localeCompare(a[filter.sort])
+                        :
+                        filter.descending?a[filter.sort]-b[filter.sort]:b[filter.sort]-a[filter.sort]
+                    }).map(row=>{
                         row.length<9?row.splice(6,0,...[(row[5]-row[4]),(row[5]/row[4]*100).toFixed(2)+'%']):row
                         return(
                          <tr class="bg-gray-800 border-b border-gray-700">

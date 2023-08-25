@@ -31,7 +31,7 @@ export default function Calender({date}) {
                 <div class="px-4 flex items-center justify-between">
                     <span  tabindex="0" class="focus:outline-none  text-base font-bold text-gray-100 ">{(new Date(calender[0],calender[1],1)).toLocaleString('default', {month:'long'})} {calender[0]}</span>
                     <div class="flex items-center">
-                        <button onClick={e=>changeMonth(e,-1)} aria-label="calendar backward" class="focus:text-gray-400 hover:text-gray-400  text-gray-100">
+                    <button onClick={e=>changeMonth(e,-1)} aria-label="calendar backward" class="focus:text-gray-400 hover:text-gray-400  text-gray-100">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                             <polyline points="15 6 9 12 15 18" />

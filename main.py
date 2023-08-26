@@ -27,6 +27,8 @@ cur = con.cursor()
 
 app = Flask(__name__, static_folder='frontend/dist')
 app.secret_key = "secret"
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_COOKIE_SECURE'] = True
 CORS(app)
 # Serve React App
 @app.route('/', defaults={'path': ''})
@@ -56,6 +58,7 @@ def login():
     user = cur.fetchone()
     if user:
         session["user"] = user
+        print("### Session var :: ",session["user"])
         return {"status":"success","response":{ "role":user[1], "username":user[2], "email":user[4]}}
     else:
         return {"status":"error","response":"Invalid username or password"}
@@ -67,7 +70,7 @@ def getsales():
     sales = cur.fetchall()
     return {"sales":sales}
 
-@app.route("/sales", methods=["POST"])
+@app.route("/sales", methods=["POST"]) #insert into sales DB
 def sales():
     data = request.get_json()
     print(data)
@@ -81,8 +84,9 @@ def buisness():
 
 @app.route("/session")
 def sessioncheck():
-    if session.get("user"):
-        user = session["user"]
+    user = session.get("user")
+    print(user)
+    if user:
         return {"status":"success","response":{ "role":user[1], "username":user[2], "email":user[4]}}
     else:
         return {"status":"error","response":"Session expired"}
@@ -101,4 +105,4 @@ def setinventory():
     pass
 
 if __name__ == '__main__':
-    app.run(debug=True, port=os.getenv("PORT", default=5000),host="0.0.0.0")
+    app.run(debug=False, port=os.getenv("PORT", default=5000),host="0.0.0.0")

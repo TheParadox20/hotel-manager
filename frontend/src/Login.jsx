@@ -35,7 +35,7 @@ export default function Login() {
             }else if(data.status === 'error'){
                 alert(data.response)
             }
-        })
+        }).catch(err => alert("server error"))
     }
     let signUp = (e) => {
         e.preventDefault()
@@ -55,9 +55,9 @@ export default function Login() {
             })
         }).then(res => res.json()).then(data => {
             console.log(data)
-            if(data.status === 'success') setSignup(false)
+            if(data.status === 'success')
             if(data.status === 'failed') alert(data.message)
-        })
+        }).catch(err => alert("server error"))
     }
     
     return(
@@ -98,6 +98,7 @@ export default function Login() {
                                     name="name"
                                     type="text"
                                     autoComplete="name"
+                                    placeholder='jane doe'
                                     value={name}
                                     onChange={(e)=>setName(e.target.value)}
                                     className="pl-2 text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-0 sm:text-sm sm:leading-6"
@@ -115,6 +116,7 @@ export default function Login() {
                                     name="email"
                                     type="email"
                                     autoComplete="mail"
+                                    placeholder='jane@example.com'
                                     value={email}
                                     onChange={(e)=>setEmail(e.target.value)}
                                     className="pl-2 text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-0 sm:text-sm sm:leading-6"
@@ -130,6 +132,7 @@ export default function Login() {
                                     <input
                                     id="phone"
                                     name="phone"
+                                    placeholder='0712345678'
                                     type="tel"
                                     value={phone}
                                     onChange={(e)=>setPhone(e.target.value)}

@@ -21,14 +21,11 @@ export default function Dashboard(){
         fetch(`${baseURL}/logout`).then(res => res.json()).then(data => {
             console.log(data)
             if(data.status=="success"){
-                localStorage.removeItem('username')
-                localStorage.removeItem('email')
-                localStorage.removeItem('token')
-                setUser(null)
+                localStorage.removeItem('user')
+                setUser(null);
+                location.reload();
             }
-        }).catch(err => {
-            console.log(err)
-        })
+        }).catch(err => alert("server error"))
     }
     let toggle = (e) => {
         e.preventDefault()

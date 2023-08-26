@@ -20,7 +20,7 @@ export default function Home(){
         fetch(`${baseURL}/getsales`).then(res => res.json()).then(data => {
             console.log('fetching :: ',data)
             setHotelData(data.sales)
-        })
+        }).catch(err => alert("server error, can't fetch sales data"))
     }, []);
 
     return (

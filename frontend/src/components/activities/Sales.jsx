@@ -94,9 +94,7 @@ export default function Sales(){// data entry component
                 Actuals[1]('')
                 alert('Data submitted successfully')
             }
-        }).catch(err => {
-            console.log(err)
-        })
+        }).catch(err => alert("server error"))
     }
     return(
         <div className="w-full flex flex-col lg:flex-row justify-evenly">

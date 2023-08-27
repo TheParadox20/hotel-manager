@@ -4,7 +4,7 @@ export const Context = createContext();
 
 export function ContextProvider({ children }) {
     let User = useState(null)
-    let Filters = useState({start:0,end:0,depth:[],epoch:'20230601',descending:true,sort:0})
+    let Filters = useState({start:0,end:0,depth:[],epoch:'20230601',descending:true,sort:0,inventory:false})
     let HotelData = useState([])
 
     return (

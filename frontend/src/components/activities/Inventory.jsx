@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react"
 import { Context } from "../../ContextProvider"
 import Calender from "../Calender"
+import {baseURL} from "../../data.json"
 
 export function Input({variable, level}){
     let { HotelData } = useContext(Context);
@@ -64,6 +65,31 @@ export default function Inventory(){// data entry component
 
     let submit = (e) => {
         e.preventDefault()
+        fetch(`${baseURL}/setinventory`,{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                hotel:Hotels[0],
+                purchases:Purchases[0],
+                sales:Sales[0],
+                opening:opening[0],
+                closing:closing[0],
+                datestamp:`${Datestamp[0][0]}-${(new Date(Datestamp[0][0],Datestamp[0][1],1)).toLocaleString('default', {month:'long'})}-${Datestamp[0][2]}`
+            })
+        }).then(res=>res.json()).then(data=>{
+            if(data.status === 'success'){
+                alert('Inventory added successfully')
+                Hotels[1]('')
+                Purchases[1]('')
+                Sales[1]('')
+                opening[1]('')
+                closing[1]('')
+            }else if(data.status === 'error'){
+                alert(data.response)
+            }
+        }).catch(err=>alert("server error"))
     }
     return(
         <div className="w-full flex flex-col lg:flex-row justify-evenly">

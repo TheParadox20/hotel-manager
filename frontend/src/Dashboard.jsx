@@ -8,14 +8,36 @@ import Download from "./components/Download"
 import {baseURL} from "./data.json"
 
 export default function Dashboard(){
-    let { User } = useContext(Context);
+    let { User, HotelData, Filters } = useContext(Context);
+    let [hotelData, setHotelData] = HotelData;
+    let [filter, setFilter] = Filters;
     let [user, setUser] = User;
     let [page, setPage] = useState('home')
 
     //if not logged in, redirect to login page via useEffect
     useEffect(()=>{
         initFlowbite();
+        fetch(`${baseURL}/getsales`).then(res => res.json()).then(data => {
+            console.log('fetching :: ',data)
+            setHotelData(data.sales)
+        }).catch(err => alert("server error, can't fetch sales data"))
     },[])
+    useEffect(() => {
+        if(filter.inventory){
+            console.log('fetching inventory')
+            fetch(`${baseURL}/getinventory`).then(res => res.json()).then(data => {
+                console.log('fetching :: ',data)
+                setHotelData(data.response)
+            }).catch(err => alert("server error, can't fetch inventory data"))
+        }else{
+            console.log('fetching sales')
+            fetch(`${baseURL}/getsales`).then(res => res.json()).then(data => {
+                console.log('fetching :: ',data)
+                setHotelData(data.sales)
+            }).catch(err => alert("server error, can't fetch sales data"))
+        }
+    }, [filter.inventory]);
+
     let logout = (e) => {
         e.preventDefault()
         fetch(`${baseURL}/logout`).then(res => res.json()).then(data => {

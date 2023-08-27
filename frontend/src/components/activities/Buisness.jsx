@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react"
 import {baseURL} from "../../data.json"
 
-export function Add({Control}){
-    let [type,setType] = useState('')
+export function Add({Control, Others}){
+    let [type,setType] = useState('Hotel')
     let [name,setName] = useState('')
 
     let submit = (e) => {
@@ -19,6 +19,7 @@ export function Add({Control}){
         }).then(res=>res.json()).then(data=>{
             if(data.status === 'success'){
                 alert('Buisness added successfully')
+                Others[1]([...Others[0],[type,name]])
                 Control[1](false)
             }else if(data.status === 'error'){
                 alert(data.response)
@@ -33,7 +34,8 @@ export function Add({Control}){
                     Type
                 </label>
                 <select name="type" className="pl-2 py-2 text-black block w-full rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-0 sm:text-sm sm:leading-6" value={type} onChange={event =>{setType(event.target.value)}} >
-                    <option value="hotel">Hotel</option>
+                    <option value="Hotel">Hotel</option>
+                    <option value="Saloon">Saloon</option>
                 </select>
             </div>
             <div>
@@ -60,16 +62,18 @@ export function Add({Control}){
     )
 }
 
-export default function Buisnesses(){
+export default function Buisness(){
     let ControlAdd = useState(false)
     let [users, setUsers] = useState([])
-    let [buisnesses, setBuisnesses] = useState([{}])
+    let Buisnesses = useState([])
+
+    let roles = ['','Sales executive','accountant','clerk','supervisor','manager','Admin'];
 
     useEffect(()=>{
         fetch(`${baseURL}/buisnesses`).then(res=>res.json()).then(data=>{
             console.log(data)
             if(data.status === 'success'){
-                setBuisnesses(data.response.buisnesses)
+                Buisnesses[1](data.response.buisnesses)
                 setUsers(data.response.users)
             }else if(data.status === 'error'){
                 console.log(data.response)
@@ -80,7 +84,7 @@ export default function Buisnesses(){
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className=" bg-gray-800 rounded py-4">
                 {
-                    ControlAdd[0]?<Add Control={ControlAdd} />:
+                    ControlAdd[0]?<Add Control={ControlAdd} Others={Buisnesses} />:
                     <div className="flex gap-4 items-center justify-center flex-col" onClick={e=>ControlAdd[1](true)}>
                         <button className="w-max"><img className="w-48 block" src="/add.svg"/></button>
                         <p className="text-2xl my-4 font-semibold">Add Buisness</p>
@@ -97,14 +101,20 @@ export default function Buisnesses(){
                         </tr>
                     </thead>
                     <tbody>
-                        <tr className="bg-gray-800 border-b border-gray-700">
-                            <td className="px-6 py-4 whitespace-nowrap">Hotel</td>
-                            <td className="px-6 py-4 whitespace-nowrap">Esela</td>
-                            <td className="md:px-6 py-2 md:py-0"><button className="py-2 w-full bg-gray-900 font-mono my-1 hover:uppercase"><img className="inline" src="/x.svg" alt="" /> remove</button></td>
-                        </tr>
                         {
-                            7-buisnesses.length>0?
-                            [...Array(7-buisnesses.length)].map((item,index)=>{
+                            Buisnesses[0].map((item,index)=>{
+                                return(
+                                    <tr className="bg-gray-800 border-b border-gray-700">
+                                        <td className="px-6 py-4 whitespace-nowrap">{item[1]}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap">{item[0]}</td>
+                                        <td className="md:px-6 py-2 md:py-0"><button className="py-2 w-full bg-gray-900 font-mono my-1 hover:uppercase"><img className="inline" src="/x.svg" alt="" /> remove</button></td>
+                                    </tr>
+                                )
+                            })
+                        }
+                        {
+                            7-Buisnesses[0].length>0?
+                            [...Array(7-Buisnesses[0].length)].map((item,index)=>{
                                 return(
                                     <tr className="bg-gray-800 border-b border-gray-700">
                                         <td className="px-6 py-4 whitespace-nowrap"></td>
@@ -127,12 +137,18 @@ export default function Buisnesses(){
                         </tr>
                     </thead>
                     <tbody>
-                        <tr className="bg-gray-800 border-b border-gray-700">
-                            <td className="px-6 py-4 whitespace-nowrap">Jane Doe</td>
-                            <td className="px-6 py-4 whitespace-nowrap">Admin</td>
-                            <td className="md:px-6 py-2 md:py-0"><button className="py-2 w-full bg-gray-900 font-mono my-1 hover:uppercase">remove</button></td>
-                            <td className="md:px-6 py-2 md:py-0"><button className="py-2 w-full bg-gray-900 font-mono my-1 hover:uppercase">Change role</button></td>
-                        </tr>
+                        {
+                            users.map((user,index)=>{
+                                return(
+                                    <tr className="bg-gray-800 border-b border-gray-700">
+                                        <td className="px-6 py-4 whitespace-nowrap">{user[0]}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap">{roles[user[1]]}</td>
+                                        <td className="md:px-6 py-2 md:py-0"><button className="py-2 w-full bg-gray-900 font-mono my-1 hover:uppercase">remove</button></td>
+                                        <td className="md:px-6 py-2 md:py-0"><button className="py-2 w-full bg-gray-900 font-mono my-1 hover:uppercase">Change role</button></td>
+                                    </tr>
+                                )
+                            })
+                        }
                         {
                             5-users.length>0?
                             [...Array(5-users.length)].map((item,index)=>{
@@ -157,14 +173,20 @@ export default function Buisnesses(){
                         </tr>
                     </thead>
                     <tbody>
-                        <tr className="bg-gray-800 border-b border-gray-700">
-                            <td className="px-6 py-3">Esela</td>
-                            <td className="px-6 py-3"><input className="w-3/4 md:w-fit bg-gray-200 text-black" type="number" /></td>
-                            <td className="md:px-6 py-2 md:py-0"><button className="py-2 w-full bg-gray-900 font-mono my-1 hover:uppercase">Set</button></td>
-                        </tr>
                         {
-                            5-buisnesses.length>0?
-                            [...Array(5-buisnesses.length)].map((item,index)=>{
+                            Buisnesses[0].map((item,index)=>{
+                                return(
+                                    <tr className="bg-gray-800 border-b border-gray-700">
+                                        <td className="px-6 py-3">{item[0]}</td>
+                                        <td className="px-6 py-3"><input className="w-3/4 md:w-fit bg-gray-200 text-black" type="number" /></td>
+                                        <td className="md:px-6 py-2 md:py-0"><button className="py-2 w-full bg-gray-900 font-mono my-1 hover:uppercase">Set</button></td>
+                                    </tr>
+                                )
+                            })
+                        }
+                        {
+                            5-Buisnesses[0].length>0?
+                            [...Array(5-Buisnesses[0].length)].map((item,index)=>{
                                 return(
                                     <tr className="bg-gray-800 border-b border-gray-700">
                                         <td className="px-6 py-4 whitespace-nowrap"></td>

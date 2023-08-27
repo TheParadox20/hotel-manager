@@ -72,8 +72,8 @@ export default function Filter(){
                     <div id="options" className="hidden font-semibold origin-top-left absolute right-4 top-6 mt-2 w-48 rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5">
                         <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                         <button onClick={e=>{toggler(e,"options")}} className="block w-full pr-4 text-right">X</button>
-                            <button className="block w-full text-left px-4 py-2 text-sm text-gray-50 hover:bg-gray-800" role="menuitem"><img className="inline w-4 mr-2" src="/clear-filter.svg" alt="" />Clear filters</button>
-                            <button className="block w-full text-left px-4 py-2 text-sm text-gray-50 hover:bg-gray-800" role="menuitem"><img className="inline w-4 mr-2" src="/inventory.svg" alt="" />Inventory</button>
+                            <button onClick={e=>setFilter({start:0,end:0,depth:[],epoch:'20230601',descending:true,sort:0,inventory:false})} className="block w-full text-left px-4 py-2 text-sm text-gray-50 hover:bg-gray-800" role="menuitem"><img className="inline w-4 mr-2" src="/clear-filter.svg" alt="" />Clear filters</button>
+                            <button onClick={e=>setFilter({... filter, inventory:!filter.inventory})} className="block w-full text-left px-4 py-2 text-sm text-gray-50 hover:bg-gray-800" role="menuitem"><img className="inline w-4 mr-2" src="/inventory.svg" alt="" />{filter.inventory?"Sales":"Inventory"}</button>
                         </div>
                     </div>
             </div>

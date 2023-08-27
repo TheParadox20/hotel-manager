@@ -4,6 +4,8 @@ import {baseURL} from '../../data.json'
 export default function Lobby(){
     let [users,setUsers] = useState([]);
 
+    let roles = ['','Sales executive','accountant','clerk','supervisor','manager','Admin'];
+
     useEffect(()=>{
         fetch(`${baseURL}/lobby`).then(res=>res.json()).then(data=>{
             if(data.status === 'success'){
@@ -19,7 +21,7 @@ export default function Lobby(){
         fetch(`${baseURL}/admit?id=${id}&choice=${choice}`).then(res=>res.json()).then(data=>{
             console.log(data)
             if(data.status === 'success'){
-                alert(`User ${data.response.user} admitted for ${data.response.role} role`)
+                alert(`User ${data.response.user} ${choice=='yes'?"admitted":"denied"} for ${roles[data.response.role]} role`)
                 //remove user from users
                 let newUsers = users.filter(user=>user[0]!=id)
                 setUsers(newUsers)
@@ -43,12 +45,20 @@ export default function Lobby(){
                     </tr>
                 </thead>
                 <tbody className='py-8'>
-                    <tr className="bg-gray-800 border-b border-gray-700 py-40">
-                        <td className="px-6 py-4 whitespace-nowrap">Admin</td>
-                        <td className="px-6 py-4 whitespace-nowrap">John Doe</td>
-                        <td className="px-6 py-4 whitespace-nowrap"><button className="w-full h-full hover:uppercase hover:text-green-600"> <img className="inline mx-2 w-4" src="/tick.svg" alt="" />Admit</button></td>
-                        <td className="px-6 py-4 whitespace-nowrap"><button className="w-full h-full hover:uppercase hover:text-red-600"> <img className="inline mx-2 w-4" src="/x.svg" alt="" />Reject</button></td>
-                    </tr>
+                    {
+                        users.map((user,index)=>{
+                            return(
+                                <tr className="bg-gray-800 border-b border-gray-700 py-40">
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        {roles[user[1]]}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">{user[2]}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap"><button onClick={e=>submit(e,user[0],'yes')} className="w-full h-full hover:uppercase hover:text-green-600"> <img className="inline mx-2 w-4" src="/tick.svg" alt="" />Admit</button></td>
+                                    <td className="px-6 py-4 whitespace-nowrap"><button onClick={e=>submit(e,user[0],'no')} className="w-full h-full hover:uppercase hover:text-red-600"> <img className="inline mx-2 w-4" src="/x.svg" alt="" />Reject</button></td>
+                                </tr>
+                            )
+                        })
+                    }
                     {
                             10-users.length>0?
                             [...Array(10-users.length)].map((item,index)=>{

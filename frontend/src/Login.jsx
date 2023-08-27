@@ -55,7 +55,7 @@ export default function Login() {
             })
         }).then(res => res.json()).then(data => {
             console.log(data)
-            if(data.status === 'success')
+            if(data.status === 'success') setSignup(false)
             if(data.status === 'failed') alert(data.message)
         }).catch(err => alert("server error"))
     }

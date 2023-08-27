@@ -1,5 +1,4 @@
-import { useState, useContext, useEffect } from "react"
-import { Context } from "../ContextProvider"
+import { useState, useEffect } from "react"
 import {baseURL} from "../data.json"
 
 import Bur from "./display/Bar"
@@ -11,16 +10,9 @@ import Stats from "./display/Stats"
 import Filter from "./Filter"
 
 export default function Home(){
-    let { HotelData } = useContext(Context);
-    let [hotelData, setHotelData] = HotelData;
-
     let [choice, setChoice] = useState("line");
 
     useEffect(() => {
-        fetch(`${baseURL}/getsales`).then(res => res.json()).then(data => {
-            console.log('fetching :: ',data)
-            setHotelData(data.sales)
-        }).catch(err => alert("server error, can't fetch sales data"))
     }, []);
 
     return (

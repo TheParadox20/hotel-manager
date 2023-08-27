@@ -59,6 +59,8 @@ export function Input({variable, level}){
 }
 
 export default function Sales(){// data entry component
+    let { HotelData } = useContext(Context);
+    let [hotelData, setHotelData] = HotelData;
     let Hotels = useState('')
     let Sections = useState('')
     let Supervisor = useState('')
@@ -86,6 +88,7 @@ export default function Sales(){// data entry component
         }).then(res => res.json()).then(data => {
             console.log(data)
             if(data.status=="success"){
+                setHotelData([...hotelData,[Hotels[0],Sections[0],Supervisor[0],Waitstuff[0],Target[0],Actuals[0],`${Datestamp[0][0]}-${(new Date(Datestamp[0][0],Datestamp[0][1],1)).toLocaleString('default', {month:'long'})}-${Datestamp[0][2]}`]])
                 Hotels[1]('')
                 Sections[1]('')
                 Supervisor[1]('')
@@ -94,7 +97,7 @@ export default function Sales(){// data entry component
                 Actuals[1]('')
                 alert('Data submitted successfully')
             }
-        }).catch(err => alert("server error"))
+        }).catch(err => {console.log(err);alert("server error")})
     }
     return(
         <div className="w-full flex flex-col lg:flex-row justify-evenly">

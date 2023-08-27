@@ -6,30 +6,29 @@ import hashlib
 
 #CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, role INT, username VARCHAR(255), name VARCHAR(255), email VARCHAR(255), password VARCHAR(64), phone INT)
 #CREATE TABLE admission (id INT AUTO_INCREMENT PRIMARY KEY, role INT, username VARCHAR(255), name VARCHAR(255), email VARCHAR(255), password VARCHAR(64), phone INT)
-#INSERT INTO users (role, username, name, email, password, phone) VALUES (0, "paradox", "samson onyambu", "dev@me.com", "admin", 0791210705)
 #CREATE TABLE sales (id INT AUTO_INCREMENT PRIMARY KEY, hotel VARCHAR(255), section VARCHAR(255), supervisor VARCHAR(255), waitstuff VARCHAR(255), target INT, actual INT, date VARCHAR(255))
 #CREATE TABLE inventory (id INT AUTO_INCREMENT PRIMARY KEY, hotel VARCHAR(255), purchases INT, sales INT, opening INT, closing INT , date VARCHAR(255))
 #CREATE TABLE buisness (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), type VARCHAR(255))
 
-# con = mysql.connector.connect(
-#   host="eporqep6b4b8ql12.chr7pe7iynqr.eu-west-1.rds.amazonaws.com",
-#   user="g69oj8qro3rtnqj1",
-#   password="aeosrm4kqv9akf96",
-#   database="m7ukhlpb3u1u4yjb"
-# )
-
 con = mysql.connector.connect(
-  host="localhost",
-  user="sammy",
-  password="sammy",
-  database="hotelhub"
+  host="eporqep6b4b8ql12.chr7pe7iynqr.eu-west-1.rds.amazonaws.com",
+  user="g69oj8qro3rtnqj1",
+  password="aeosrm4kqv9akf96",
+  database="m7ukhlpb3u1u4yjb"
 )
-cur = con.cursor()
+
+# con = mysql.connector.connect(
+#   host="localhost",
+#   user="sammy",
+#   password="sammy",
+#   database="hotelhub"
+# )
+cur = con.cursor(buffered=True)
 
 app = Flask(__name__, static_folder='frontend/dist')
 app.secret_key = "secret"
 app.config['SESSION_TYPE'] = 'filesystem'
-app.config['SESSION_COOKIE_SECURE'] = False
+app.config['SESSION_COOKIE_SECURE'] = True
 CORS(app)
 # Serve React App
 @app.route('/', defaults={'path': ''})
@@ -62,9 +61,9 @@ def lobby():
 def admit():
     #transfer users from admission to users
     data = request.args #contains choice and id
+    cur.execute("SELECT * FROM admission WHERE id = %s", (data["id"],))
+    user = cur.fetchone()
     if data.get('choice') == "yes":
-        cur.execute("SELECT role, username, name, email, password, phone FROM admission WHERE id = %s", (data["id"],))
-        user = cur.fetchone()
         cur.execute("INSERT INTO users (role, username, name, email, password, phone) VALUES (%s, %s, %s, %s, %s, %s)", (user[1], user[2], user[3], user[4], user[5], user[6]))
         con.commit()
         cur.execute("DELETE FROM admission WHERE id = %s", (data["id"],))
@@ -72,7 +71,7 @@ def admit():
     elif data.get('choice') == "no":
         cur.execute("DELETE FROM admission WHERE id = %s", (data["id"],))
         con.commit()
-    return {"status":"success"}
+    return {"status":"success","response":{"user":user[3],"role":user[1]}}
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -122,15 +121,36 @@ def logout():
 
 @app.route("/getinventory")
 def getinventory():
-    pass
+    cur.execute("SELECT hotel, purchases, sales, opening, closing, date FROM inventory")
+    inventory = cur.fetchall()
+    return {"status":"success","response":inventory}
 
-@app.route("/setinventory")
+@app.route("/setinventory", methods=["POST"])
 def setinventory():
-    pass
+    #insert into inventory DB
+    data = request.get_json()
+    print(data)
+    cur.execute("INSERT INTO inventory (hotel, purchases, sales, opening, closing, date) VALUES (%s, %s, %s, %s, %s, %s)", (data["hotel"], data["purchases"], data["sales"], data["opening"], data["closing"], data["datestamp"]))
+    con.commit()
+    return {"status":"success","response":""}
 
 @app.route("/buisnesses")
 def buisnesses():
-    return {"status":"error","response":"Session expired"}
+    cur.execute("SELECT name, type FROM buisness")
+    buisnesses = cur.fetchall()
+    # select all unique users from users table
+    cur.execute("SELECT DISTINCT name,role FROM users")
+    users = cur.fetchall()
+    return {"status":"success","response":{"buisnesses":buisnesses,"users":users}}
+
+
+@app.route("/addbuisness", methods=["POST"])
+def addbuisness():
+    #insert into buisness DB
+    data = request.get_json()
+    cur.execute("INSERT INTO buisness (name, type) VALUES (%s, %s)", (data["name"], data["type"]))
+    con.commit()
+    return {"status":"success","response":""}
 
 if __name__ == '__main__':
-    app.run(debug=True, port=os.getenv("PORT", default=5000),host="0.0.0.0")
+    app.run(debug=False, port=os.getenv("PORT", default=5000),host="0.0.0.0")

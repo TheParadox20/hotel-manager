@@ -68,14 +68,14 @@ export default function Dashboard(){
                             </p>
                         </div>
                         <ul className="py-1" role="none">
-                            <li>
-                            <button onClick={e=>setPage('home')} className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white" role="menuitem">Dashboard</button>
+                            <li >
+                            <button onClick={e=>setPage('home')} className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white" role="menuitem">Dashboard</button>
                             </li>
-                            <li>
-                            <button onClick={e=>setPage('settings')} className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white" role="menuitem">Settings</button>
+                            <li >
+                            <button onClick={e=>setPage('settings')} className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white" role="menuitem">Settings</button>
                             </li>
-                            <li>
-                            <button onClick={e=>logout(e)} className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white" role="menuitem">Sign out</button>
+                            <li >
+                            <button onClick={e=>logout(e)} className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white" role="menuitem">Sign out</button>
                             </li>
                         </ul>
                         </div>

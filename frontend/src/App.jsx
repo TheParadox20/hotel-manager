@@ -12,15 +12,12 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('user',"{}")
     fetch(`${baseURL}/session`).then(res => res.json()).then(data => {
-      console.log(data)
       if(data.status === 'success'){
-        console.log('session found')
         if(localStorage.getItem('user')=="{}"){
           localStorage.setItem('user',JSON.stringify({username:data.response.username,role:data.response.role,email:data.response.email}))
         }
         setUser({username:data.response.username,role:data.response.role,email:data.response.email})
       }else if(data.status === 'error'){
-        console.log('session not found')
         setUser(null)
         if(JSON.parse(localStorage.getItem('user')).username) {
           alert(data.response);
@@ -28,7 +25,7 @@ export default function App() {
         }
         setAuthorized(false);
       }
-    }).catch(err => {console.log(err);alert('Server error, can\'t get session info')})
+    }).catch(err => {alert('Server error, can\'t get session info')})
     if(user){
       setAuthorized(true)
     }

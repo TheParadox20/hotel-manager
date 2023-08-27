@@ -81,7 +81,7 @@ export default function Sales(){// data entry component
                 waitstuff:Waitstuff[0],
                 target:Target[0],
                 actual:Actuals[0],
-                datestamp:Datestamp[0]
+                datestamp:`${Datestamp[0][0]}-${(new Date(Datestamp[0][0],Datestamp[0][1],1)).toLocaleString('default', {month:'long'})}-${Datestamp[0][2]}`
             })
         }).then(res => res.json()).then(data => {
             console.log(data)

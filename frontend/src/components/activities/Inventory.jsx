@@ -48,7 +48,7 @@ export function Input({variable, level}){
                     }
                 </ul>
             </div>
-            <input className="w-full py-2 px-1 rounded-md bg-gray-300 text-black" type={level.includes('amount')?'number':'text'} name="" id="" placeholder={level} value={choice} onChange={e=>setChoice(e.target.value)} />
+            <input className="w-full py-2 px-1 rounded-md bg-gray-300 text-black" type={level.includes('Hotel')?'text':'number'} name="" id="" placeholder={level} value={choice} onChange={e=>setChoice(e.target.value)} />
         </div>
         </>
     )

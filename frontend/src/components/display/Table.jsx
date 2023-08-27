@@ -34,24 +34,24 @@ export default function Table(){
     }
 
     return(
-        <table class="w-full text-sm text-left text-gray-400 table-auto">
-            <thead class="text-xs text-gray-100 uppercase bg-blue-900 sticky top-0">
+        <table className="w-full text-sm text-left text-gray-400 table-auto">
+            <thead className="text-xs text-gray-100 uppercase bg-blue-900 sticky top-0">
                 <tr>
                     {
                         filter.depth.length==0?
                         ["Hotel","Section","Supervisor","waitstuff"].map((col)=>{return(
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 {col}
                             </th>
                         )}):
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" className="px-6 py-3">
                             {["Hotel","Section","Supervisor","waitstuff"][filter.depth[0]]}
                         </th>
 
                     }
                     {
                         ["Target","Actual","Variance","% Performance","Date"].map((col)=>{return(
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 {col}
                             </th>
                         )})
@@ -69,10 +69,10 @@ export default function Table(){
                     }).map(row=>{
                         row.length<9?row.splice(6,0,...[(row[5]-row[4]),(row[5]/row[4]*100).toFixed(2)+'%']):row
                         return(
-                         <tr class="bg-gray-800 border-b border-gray-700">
+                         <tr className="bg-gray-800 border-b border-gray-700">
                              {row.map(col=>{
                                     return(
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td className="px-6 py-4 whitespace-nowrap">
                                             {col}
                                         </td>
                                     )
@@ -83,10 +83,10 @@ export default function Table(){
                     :
                     compute().map(row=>{
                         return(
-                         <tr class="bg-gray-800 border-b border-gray-700">
+                         <tr className="bg-gray-800 border-b border-gray-700">
                              {row.map(col=>{
                                     return(
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td className="px-6 py-4 whitespace-nowrap">
                                             {col}
                                         </td>
                                     )
@@ -100,8 +100,8 @@ export default function Table(){
                     [...Array((10-hotelData.length))].map((item,index)=>{
                         console.log(index)
                         return(
-                            <tr class="bg-gray-800 border-b border-gray-700">
-                                <td class="px-6 py-4 whitespace-nowrap"></td>
+                            <tr className="bg-gray-800 border-b border-gray-700">
+                                <td className="px-6 py-4 whitespace-nowrap"></td>
                             </tr>
                         )
                     }):

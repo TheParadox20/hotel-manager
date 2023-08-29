@@ -30,13 +30,19 @@ export function Add({Control, Others}){
         <>
         <form className="mx-4 lg:w-1/2 lg:mx-auto">
             <div>
-                <label htmlFor="key" className="block text-lg font-bold leading-6 my-6">
+                <label htmlFor="type" className="block text-lg font-bold leading-6 my-6">
                     Type
                 </label>
-                <select name="type" className="pl-2 py-2 text-black block w-full rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-0 sm:text-sm sm:leading-6" value={type} onChange={event =>{setType(event.target.value)}} >
-                    <option value="Hotel">Hotel</option>
-                    <option value="Saloon">Saloon</option>
-                </select>
+                <div className="mt-2">
+                    <input
+                    id="type"
+                    name="type"
+                    type="text"
+                    value={type}
+                    onChange={(e)=>setType(e.target.value)}
+                    className="pl-2 text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-0 sm:text-sm sm:leading-6"
+                    />
+                </div>
             </div>
             <div>
                 <label htmlFor="name" className="block text-lg font-bold leading-6 my-6">

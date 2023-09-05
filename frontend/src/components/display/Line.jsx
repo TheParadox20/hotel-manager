@@ -11,6 +11,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import { useContext } from 'react';
 import { Context } from '../../ContextProvider';
+import { getDatesOfWeek, getDaySuffix } from '../Calender';
 
 ChartJS.register(
   CategoryScale,
@@ -22,35 +23,45 @@ ChartJS.register(
   Legend
 );
 
-const options = {
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      display: true,
-      position: 'top',
-    },
-    title: {
-      display: true,
-      text: 'Total sales',
-    },
-  },
-};
 let colours = ['#1d4ed8','#5b21b6','#3730a3','']
 export default function Lyn() {
   let { Filters, HotelData } = useContext(Context);
   let [filter, setFilter] = Filters;
   let [hotelData, setHotelData] = HotelData;
 
-  let labels = [...new Set(hotelData.map(item=>item[item.length-1]))];
+  let options = {
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: filter.inventory
+              ?//inventory mode
+              'Net sales'
+              ://sales mode
+              'Total sales',
+      },
+    },
+  };
+
+
+  let dates = getDatesOfWeek(filter.epoch);
+  let labels = dates.map((date)=>{
+    date = date.split('-');
+    return `${date[1].slice(0,3)} ${date[2]}${getDaySuffix(date[2])}`
+  })
 
   let compute = ()=>{
     let data = []
     let sum = (item)=>{//item==selection
       let totals = []
-      for(let i=0;i<labels.length;i++){
+      for(let i=0;i<dates.length;i++){
         let total=0
         hotelData.forEach(row => {
-          if(row[filter.depth[0]]==item && row[row.length-1]==labels[i]) total+=row[5]
+          if(row[filter.depth[0]]==item && row[row.length-1]==dates[i]) total+=row[5]
         });
         totals.push(total)
       }

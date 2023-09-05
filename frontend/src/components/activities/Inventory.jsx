@@ -73,7 +73,8 @@ export default function Inventory(){// data entry component
             body:JSON.stringify({
                 hotel:Hotels[0],
                 purchases:Purchases[0],
-                sales:Sales[0],
+                grossales:Sales[0],
+                netsales:Sales[0]/1.18,
                 opening:opening[0],
                 closing:closing[0],
                 datestamp:`${Datestamp[0][0]}-${(new Date(Datestamp[0][0],Datestamp[0][1],1)).toLocaleString('default', {month:'long'})}-${Datestamp[0][2]}`

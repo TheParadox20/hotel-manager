@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import {baseURL} from "../../data.json"
+import { Context } from "../../ContextProvider"
 
-export function Add({Control, Others}){
+export function Add({Control, Others, Role}){
     let [type,setType] = useState('Hotel')
     let [name,setName] = useState('')
 
@@ -29,21 +30,24 @@ export function Add({Control, Others}){
     return(
         <>
         <form className="mx-4 lg:w-1/2 lg:mx-auto">
-            <div>
-                <label htmlFor="type" className="block text-lg font-bold leading-6 my-6">
-                    Type
-                </label>
-                <div className="mt-2">
-                    <input
-                    id="type"
-                    name="type"
-                    type="text"
-                    value={type}
-                    onChange={(e)=>setType(e.target.value)}
-                    className="pl-2 text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-0 sm:text-sm sm:leading-6"
-                    />
+            {
+                Role==6 &&
+                <div>
+                    <label htmlFor="type" className="block text-lg font-bold leading-6 my-6">
+                        Type
+                    </label>
+                    <div className="mt-2">
+                        <input
+                        id="type"
+                        name="type"
+                        type="text"
+                        value={type}
+                        onChange={(e)=>setType(e.target.value)}
+                        className="pl-2 text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-0 sm:text-sm sm:leading-6"
+                        />
+                    </div>
                 </div>
-            </div>
+            }
             <div>
                 <label htmlFor="name" className="block text-lg font-bold leading-6 my-6">
                     Name
@@ -68,10 +72,13 @@ export function Add({Control, Others}){
     )
 }
 
-export default function Buisness(){
+export default function Buisness({Role}){
     let ControlAdd = useState(false)
     let [users, setUsers] = useState([])
     let Buisnesses = useState([])
+
+    let { User } = useContext(Context);
+    let [user, setUser] = User;
 
     let roles = ['','Sales executive','accountant','clerk','supervisor','manager','Admin'];
 
@@ -90,10 +97,10 @@ export default function Buisness(){
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className=" bg-gray-800 rounded py-4">
                 {
-                    ControlAdd[0]?<Add Control={ControlAdd} Others={Buisnesses} />:
+                    ControlAdd[0]?<Add Control={ControlAdd} Others={Buisnesses} Role={user.role} />:
                     <div className="flex gap-4 items-center justify-center flex-col" onClick={e=>ControlAdd[1](true)}>
                         <button className="w-max"><img className="w-48 block" src="/add.svg"/></button>
-                        <p className="text-2xl my-4 font-semibold">Add Buisness</p>
+                        <p className="text-2xl my-4 font-semibold">Add {user.role==6?"Buisness":"Section"}</p>
                     </div>
                 }
             </div>
@@ -101,8 +108,19 @@ export default function Buisness(){
                 <table className="w-full text-sm text-left text-gray-400 table-auto">
                     <thead className="text-xs text-gray-100 uppercase bg-blue-900 sticky top-0">
                         <tr>
-                            <th className="px-6 py-3">Buisness type</th>
-                            <th className="px-6 py-3">Name</th>
+                            {
+                                user.role==6
+                                ? //if admin
+                                <>
+                                <th className="px-6 py-3">Buisness type</th>
+                                <th className="px-6 py-3">Name</th>
+                                </>
+                                :
+                                <>
+                                <th className="px-6 py-3">Buisness</th>
+                                <th className="px-6 py-3">Section</th>
+                                </>
+                            }
                             <th className="px-6 py-3"></th>
                         </tr>
                     </thead>
@@ -173,7 +191,9 @@ export default function Buisness(){
                 <table className="w-full text-sm text-left text-gray-400 table-auto">
                     <thead className="text-xs text-gray-100 uppercase bg-blue-900 sticky top-0">
                         <tr>
-                            <th className="px-6 py-3">Hotel</th>
+                            {user.role==6 && <th className="px-6 py-3">Hotel</th>}
+                            {user.role==5 && <th className="px-6 py-3">Section</th>}
+                            {user.role==4 && <th className="px-6 py-3">Waitstuff</th>}
                             <th className="px-6 py-3">Target</th>
                             <th className="px-6 py-3"></th>
                         </tr>

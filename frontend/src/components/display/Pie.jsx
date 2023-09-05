@@ -36,6 +36,19 @@ export default function Pie() {
 
   let compute = ()=>{
     let data = []
+    if (filter.inventory) //inventory mode 
+    for(let i=0;i<labels.length;i++){
+      let purchases = 0
+      let sales = 0
+      hotelData.forEach(row => {
+        if(row[filter.depth.length==0?0:filter.depth[0]]==labels[i]){
+          purchases+=row[1]
+          sales+=row[3]
+        }
+      });
+      data.push((purchases/sales * 100).toFixed(2))
+    }
+    else //sales mode
     for(let i=0;i<labels.length;i++){
       let targets = 0
       let actuals = 0

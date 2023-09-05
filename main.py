@@ -7,7 +7,7 @@ import hashlib
 #CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, role INT, username VARCHAR(255), name VARCHAR(255), email VARCHAR(255), password VARCHAR(64), phone INT)
 #CREATE TABLE admission (id INT AUTO_INCREMENT PRIMARY KEY, role INT, username VARCHAR(255), name VARCHAR(255), email VARCHAR(255), password VARCHAR(64), phone INT)
 #CREATE TABLE sales (id INT AUTO_INCREMENT PRIMARY KEY, hotel VARCHAR(255), section VARCHAR(255), supervisor VARCHAR(255), waitstuff VARCHAR(255), target INT, actual INT, date VARCHAR(255))
-#CREATE TABLE inventory (id INT AUTO_INCREMENT PRIMARY KEY, hotel VARCHAR(255), purchases INT, sales INT, opening INT, closing INT , date VARCHAR(255))
+#CREATE TABLE inventory (id INT AUTO_INCREMENT PRIMARY KEY, hotel VARCHAR(255), purchases INT, grossales INT, netsales INT,  opening INT, closing INT , date VARCHAR(255))
 #CREATE TABLE buisness (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), type VARCHAR(255))
 
 con = mysql.connector.connect(
@@ -121,7 +121,7 @@ def logout():
 
 @app.route("/getinventory")
 def getinventory():
-    cur.execute("SELECT hotel, purchases, sales, opening, closing, date FROM inventory")
+    cur.execute("SELECT hotel, purchases, grossales, netsales, opening, closing, date FROM inventory")
     inventory = cur.fetchall()
     return {"status":"success","response":inventory}
 
@@ -130,7 +130,7 @@ def setinventory():
     #insert into inventory DB
     data = request.get_json()
     print(data)
-    cur.execute("INSERT INTO inventory (hotel, purchases, sales, opening, closing, date) VALUES (%s, %s, %s, %s, %s, %s)", (data["hotel"], data["purchases"], data["sales"], data["opening"], data["closing"], data["datestamp"]))
+    cur.execute("INSERT INTO inventory (hotel, purchases, grossales, netsales, opening, closing, date) VALUES (%s, %s, %s, %s, %s, %s, %s)", (data["hotel"], data["purchases"], data["grossales"], data["netsales"], data["opening"], data["closing"], data["datestamp"]))
     con.commit()
     return {"status":"success","response":""}
 

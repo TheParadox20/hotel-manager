@@ -8,22 +8,27 @@ import { Context } from '../../ContextProvider';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 
-let options = {
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      position: 'bottom', // Display the legend (labels) at the bottom
-    },
-    title: {
-      display: true,
-      text: 'Weekly Average Sales',
-    },
-  },
-};
 export default function Donut() {
   let { Filters, HotelData } = useContext(Context);
   let [filter, setFilter] = Filters;
   let [hotelData, setHotelData] = HotelData;
+
+  let options = {
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom', // Display the legend (labels) at the bottom
+      },
+      title: {
+        display: true,
+        text: filter.inventory
+        ?//inventory mode
+        'Weekly Average Net Sales'
+        ://sales mode
+        'Weekly Average Sales',
+      },
+    },
+  };
 
   let labels = [...new Set(hotelData.map(item=>item[filter.depth.length==0?0:filter.depth[0]]))];
 
@@ -31,7 +36,7 @@ export default function Donut() {
     let data = []
     for(let i=0;i<labels.length;i++){
       let sum = 0
-      hotelData.forEach(row => {if(row[filter.depth.length==0?0:filter.depth[0]]==labels[i]) sum+=row[5]});
+      hotelData.forEach(row => {if(row[filter.depth.length==0?0:filter.depth[0]]==labels[i]) sum+=row[3]});
       data.push(sum/7)
     }
     return data

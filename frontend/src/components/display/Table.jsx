@@ -36,30 +36,45 @@ export default function Table(){
     return(
         <table className="w-full text-sm text-left text-gray-400 table-auto">
             <thead className="text-xs text-gray-100 uppercase bg-blue-900 sticky top-0">
-                <tr>
-                    {
-                        filter.depth.length==0?
-                        ["Hotel","Section","Supervisor","waitstuff"].map((col)=>{return(
+                {
+                    !filter.inventory?
+                    <tr>
+                        {
+                            filter.depth.length==0?
+                            ["Hotel","Section","Supervisor","waitstuff"].map((col)=>{return(
+                                <th scope="col" className="px-6 py-3">
+                                    {col}
+                                </th>
+                            )}):
                             <th scope="col" className="px-6 py-3">
-                                {col}
+                                {["Hotel","Section","Supervisor","waitstuff"][filter.depth[0]]}
                             </th>
-                        )}):
-                        <th scope="col" className="px-6 py-3">
-                            {["Hotel","Section","Supervisor","waitstuff"][filter.depth[0]]}
-                        </th>
 
-                    }
-                    {
-                        ["Target","Actual","Variance","% Performance","Date"].map((col)=>{return(
-                            <th scope="col" className="px-6 py-3">
-                                {col}
-                            </th>
-                        )})
-                    }
-                </tr>
+                        }
+                        {
+                            ["Target","Actual","Variance","% Performance","Date"].map((col)=>{return(
+                                <th scope="col" className="px-6 py-3">
+                                    {col}
+                                </th>
+                            )})
+                        }
+                    </tr>
+                    :
+                    <tr>
+                        {
+                            ["Hotel","Purchases","Gross sales","Net sales","Opening Stock","Closing Stock","Date"].map((col)=>{return(
+                                <th scope="col" className="px-6 py-3">
+                                    {col}
+                                </th>
+                            )})
+                        }
+                    </tr>
+                }
             </thead>
             <tbody>
                 {
+                    !filter.inventory
+                    ?//sales
                     filter.depth.length==0?
                     [...hotelData].sort((a,b)=>
                         typeof(a[filter.sort])=='string'?
@@ -82,6 +97,25 @@ export default function Table(){
                     })
                     :
                     compute().map(row=>{
+                        return(
+                         <tr className="bg-gray-800 border-b border-gray-700">
+                             {row.map(col=>{
+                                    return(
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            {col}
+                                        </td>
+                                    )
+                             })}
+                         </tr>
+                        )
+                    })
+                    ://inventory
+                    [...hotelData].sort((a,b)=>
+                        typeof(a[filter.sort])=='string'?
+                        filter.descending?a[filter.sort].localeCompare(b[filter.sort]):b[filter.sort].localeCompare(a[filter.sort])
+                        :
+                        filter.descending?a[filter.sort]-b[filter.sort]:b[filter.sort]-a[filter.sort]
+                    ).map(row=>{
                         return(
                          <tr className="bg-gray-800 border-b border-gray-700">
                              {row.map(col=>{

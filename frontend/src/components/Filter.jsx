@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from "react"
 import { Context } from "../ContextProvider"
+import { getWeeksOfMonth } from "./Calender"
 
 let toggler = (e,id) => {
     e.preventDefault()
@@ -7,7 +8,10 @@ let toggler = (e,id) => {
 }
 
 export function Weeks(){
-    let [calender, setCalender] = useState([ 2023, 7, 25 ])
+    let [calender, setCalender] = useState([(new Date()).getFullYear(),(new Date()).getMonth(),(new Date()).getDate()])
+    let {Filters} = useContext(Context);
+    let [filter, setFilter] = Filters;
+
     let changeMonth = (e,operand)=>{
         e.preventDefault();
         calender[1]+=operand;
@@ -21,8 +25,6 @@ export function Weeks(){
         }
         setCalender([calender[0],calender[1],calender[2]]);
     }
-    let firstDay = (new Date(calender[0], calender[1])).getDay();
-    let daysInMonth = 32 - new Date(calender[0],calender[1],32).getDate();
     return(
         <>
         <div className="flex ml-2">
@@ -33,7 +35,7 @@ export function Weeks(){
                 </svg>
             </button>
             <div className="text-center w-full">
-                <div>{(new Date(calender[0],calender[1],1)).toLocaleString('default', {month:'long'})} <span className="text-sm">{calender[0]}</span></div>
+                <div><span className="text-sm">{calender[0]}</span></div>
             </div>
             <button onClick={e=>changeMonth(e,1)} aria-label="calendar forward" className="focus:text-gray-400 hover:text-gray-400 ml-3  text-gray-100"> 
                     <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler  icon-tabler-chevron-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -44,9 +46,9 @@ export function Weeks(){
             <button onClick={e=>{toggler(e,"weeks")}} className="block font-semibold w-full pr-4 text-right">X</button>
         </div>
         {
-            ["Week 1","Week 2","Week 3","Week 4"].map((week,index)=>{
+            getWeeksOfMonth(calender[0], calender[1]).map((week,index)=>{
                 return(
-                    <button onClick={e=>{toggler(e,"weeks")}} className="block w-full text-left px-4 py-2 text-sm text-gray-50 hover:bg-gray-800" role="menuitem">{week}</button>
+                    <button value={week.epoch} onClick={e=>{toggler(e,"weeks");setFilter({...filter,epoch:e.target.value})}} className="block w-full text-left px-4 py-2 text-sm text-gray-50 hover:bg-gray-800" role="menuitem">{`${week.sunday} - ${week.saturday}`}</button>
                 )
             })
         }

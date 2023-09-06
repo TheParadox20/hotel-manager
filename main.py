@@ -10,19 +10,19 @@ import hashlib
 #CREATE TABLE inventory (id INT AUTO_INCREMENT PRIMARY KEY, hotel VARCHAR(255), purchases INT, grossales INT, netsales INT,  opening INT, closing INT , date VARCHAR(255))
 #CREATE TABLE buisness (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), type VARCHAR(255))
 
-con = mysql.connector.connect(
-  host="eporqep6b4b8ql12.chr7pe7iynqr.eu-west-1.rds.amazonaws.com",
-  user="g69oj8qro3rtnqj1",
-  password="aeosrm4kqv9akf96",
-  database="m7ukhlpb3u1u4yjb"
-)
-
 # con = mysql.connector.connect(
-#   host="localhost",
-#   user="sammy",
-#   password="sammy",
-#   database="hotelhub"
+#   host="eporqep6b4b8ql12.chr7pe7iynqr.eu-west-1.rds.amazonaws.com",
+#   user="g69oj8qro3rtnqj1",
+#   password="aeosrm4kqv9akf96",
+#   database="m7ukhlpb3u1u4yjb"
 # )
+
+con = mysql.connector.connect(
+  host="localhost",
+  user="sammy",
+  password="sammy",
+  database="hotelhub"
+)
 cur = con.cursor(buffered=True)
 
 app = Flask(__name__, static_folder='frontend/dist')
@@ -46,7 +46,7 @@ def test():
 @app.route("/signup", methods=["POST"])
 def signup():
     data = request.get_json()
-    cur.execute("INSERT INTO admission (role, username, name, email, password, phone) VALUES (%s, %s, %s, %s, %s, %s)", (data["role"], data["username"], data["name"], data["email"], hashlib.sha256(data["password"].encode()).hexdigest(), data["phone"]))
+    cur.execute("INSERT INTO admission (role, username, name, email, password, phone) VALUES (%s, %s, %s, %s, %s, %s)", (data["role"], data["username"], data["name"], data["email"], hashlib.sha256(data["password"].encode()).hexdigest(), ))
     con.commit()
     return {"status":"success"}
 

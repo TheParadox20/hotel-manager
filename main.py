@@ -46,7 +46,7 @@ def test():
 @app.route("/signup", methods=["POST"])
 def signup():
     data = request.get_json()
-    cur.execute("INSERT INTO admission (role, username, name, email, password, phone) VALUES (%s, %s, %s, %s, %s, %s)", (data["role"], data["username"], data["name"], data["email"], hashlib.sha256(data["password"].encode()).hexdigest(), ))
+    cur.execute("INSERT INTO admission (role, username, name, email, password, phone) VALUES (%s, %s, %s, %s, %s, %s)", (data["role"], data["username"], data["name"], data["email"], hashlib.sha256(data["password"].encode()).hexdigest(), data['phone']))
     con.commit()
     return {"status":"success"}
 

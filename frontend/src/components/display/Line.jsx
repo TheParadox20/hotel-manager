@@ -31,6 +31,7 @@ export default function Lyn() {
 
   let options = {
     maintainAspectRatio: false,
+    scaleBeginAtZero: false,
     plugins: {
       legend: {
         display: true,
@@ -44,6 +45,11 @@ export default function Lyn() {
               ://sales mode
               'Total sales',
       },
+    },
+    scales: {
+      y: {
+        min:0,
+      }
     },
   };
 
@@ -65,6 +71,7 @@ export default function Lyn() {
         });
         totals.push(total)
       }
+      console.log('Totals :: ',totals)
       return totals
     }
     let items = filter.depth.length==1?[...new Set(hotelData.map(item=>item[filter.depth[0]]))]:[filter.depth[1]];

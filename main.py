@@ -1,5 +1,5 @@
 import os
-from flask import Flask, send_from_directory, request, session
+from flask import Flask, send_from_directory, request, session, send_file, make_response
 from flask_cors import CORS
 import mysql.connector
 import hashlib
@@ -151,6 +151,22 @@ def addbuisness():
     cur.execute("INSERT INTO buisness (name, type) VALUES (%s, %s)", (data["name"], data["type"]))
     con.commit()
     return {"status":"success","response":""}
+
+@app.route("/download/<file_name>")
+def getFile(file_name):
+    headers = {"Content-Disposition": "attachment; filename=%s" % file_name}
+    #read from sales table and create csv_data variable to be returned
+    cur.execute("SELECT hotel, section, supervisor, waitstuff, target, actual, date FROM sales")
+    sales = cur.fetchall()
+    csv_data = "Hotel,Section,Supervisor,Waitstuff,Target,Actual,Date\n"
+    for sale in sales:
+        csv_data += ",".join([str(s) for s in sale]) + "\n"
+    return make_response((csv_data, headers))
+
+@app.route("/logs")
+def logs():
+    pass
+
 
 if __name__ == '__main__':
     app.run(debug=False, port=os.getenv("PORT", default=5000),host="0.0.0.0")

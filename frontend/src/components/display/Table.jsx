@@ -131,11 +131,13 @@ export default function Table(){
                 }
                 {
                     10-hotelData.length>0?
-                    [...Array((10-hotelData.length))].map((item,index)=>{
+                    [...Array((20-hotelData.length))].map((item,index)=>{
                         console.log(index)
                         return(
                             <tr className="bg-gray-800 border-b border-gray-700">
-                                <td className="px-6 py-4 whitespace-nowrap"></td>
+                                {[...Array((filter.depth.length==0?9:6))].map((item,index)=>{
+                                    return(<td className="px-6 py-4 whitespace-nowrap"></td>)
+                                })}
                             </tr>
                         )
                     }):

@@ -7,6 +7,20 @@ let toggler = (e,id) => {
     document.getElementById(id).classList.toggle('hidden')
 }
 
+export function Days(){
+    return(
+        <>
+        {
+            ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'].map((day,index)=>{
+                return(
+                    <button value={index} onClick={e=>{toggler(e,"days");setFilter({...filter,start:parseInt(e.target.value)})}} className="block w-full text-left px-4 py-2 text-sm text-gray-50 hover:bg-gray-800" role="menuitem">{day}</button>
+                )
+            })
+        }
+        </>
+    )
+}
+
 export function Weeks(){
     let [calender, setCalender] = useState([(new Date()).getFullYear(),(new Date()).getMonth(),(new Date()).getDate()])
     let {Filters} = useContext(Context);
@@ -49,6 +63,20 @@ export function Weeks(){
             getWeeksOfMonth(calender[0], calender[1]).map((week,index)=>{
                 return(
                     <button value={week.epoch} onClick={e=>{toggler(e,"weeks");setFilter({...filter,epoch:e.target.value})}} className="block w-full text-left px-4 py-2 text-sm text-gray-50 hover:bg-gray-800" role="menuitem">{`${week.sunday} - ${week.saturday}`}</button>
+                )
+            })
+        }
+        </>
+    )
+}
+
+export function Months(){
+    return(
+        <>
+        {
+            ['January','February','March','April','May','June','July','August','September','October','November','December'].map((month,index)=>{
+                return(
+                    <button value={index} onClick={e=>{toggler(e,"months");setFilter({...filter,end:parseInt(e.target.value)})}} className="block w-full text-left px-4 py-2 text-sm text-gray-50 hover:bg-gray-800" role="menuitem">{month}</button>
                 )
             })
         }
@@ -102,7 +130,9 @@ export default function Filter(){
                 <button onClick={e=>{toggler(e,"weeks")}} className="w-full py-4 hover:scale-105 hover:bg-gray-800"><img className="inline w-6 mx-2" src="/date.svg" alt="" />Date</button>
                     <div id="weeks" className="hidden origin-top-left absolute left-4 mt-2 w-48 rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5">
                         <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                            <Weeks/>
+                            {filter.range === 'day' && <Days/>}
+                            {filter.range === 'week' && <Weeks/>}
+                            {filter.range === 'month' && <Months/>}
                         </div>
                     </div>
             </div>

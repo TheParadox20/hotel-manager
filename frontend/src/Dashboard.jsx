@@ -5,6 +5,7 @@ import Home  from './components/Home'
 import Settings from "./components/Settings"
 import Activity from "./components/Activity"
 import Download from "./components/Download"
+import Inbox from "./components/Inbox"
 import {baseURL} from "./data.json"
 
 export default function Dashboard(){
@@ -13,6 +14,7 @@ export default function Dashboard(){
     let [filter, setFilter] = Filters;
     let [user, setUser] = User;
     let [page, setPage] = useState('home')
+    let [active, setActive] = useState('sales')
 
     //if not logged in, redirect to login page via useEffect
     useEffect(()=>{
@@ -56,7 +58,7 @@ export default function Dashboard(){
     }
     
     return(
-        <div>
+        <div className="whitespace-nowrap">
             <nav className="fixed top-0 z-50 w-full bg-gray-800 border-gray-700">
             <div className="px-3 py-3 lg:px-5 lg:pl-3">
                 <div className="flex items-center justify-between">
@@ -69,7 +71,7 @@ export default function Dashboard(){
                     </button>
                     <a href="/" className="flex ml-2 md:mr-24">
                     <img src="/logo.svg" className="h-8 mr-3" alt="Logo" />
-                    <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-gray-100">HotelHUB</span>
+                    <span className="self-center text-xl font-semibold sm:text-2xl  text-gray-100">HotelHUB</span>
                     </a>
                 </div>
                 <div className="flex items-center">
@@ -110,37 +112,87 @@ export default function Dashboard(){
             <aside onClick={e=>toggle(e)} id="logo-sidebar" className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full border-r sm:translate-x-0 bg-gray-800 border-gray-700" aria-label="Sidebar">
             <div className="h-full px-3 pb-4 overflow-y-auto bg-gray-800">
                 <ul className="space-y-2 font-medium">
-                    <li onClick={e=>setPage('home')}>
-                        <button href="#" className="flex items-center p-2  rounded-lg text-white hover:bg-gray-700">
-                        <svg aria-hidden="true" className="w-6 h-6 transition duration-75 text-gray-400  group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg>
-                        <span className="ml-3">Dashboard</span>
-                        </button>
-                    </li>
-                    {
-                        user.role > 1 &&
-                        <li onClick={e=>setPage('activity')}>
-                            <button className="flex items-center p-2  rounded-lg text-white hover:bg-gray-700">
-                            <svg aria-hidden="true" className="flex-shrink-0 w-6 h-6 transition duration-75 text-gray-400 group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                            <span className="flex-1 ml-3 whitespace-nowrap">Activity</span>
+                    <div onClick={e=>setPage('home')}>
+                        <li>
+                            <button className="flex items-center p-2  rounded-lg text-white">
+                            <svg aria-hidden="true" className="w-6 h-6 transition duration-75 text-gray-400  group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg>
+                            <span className="ml-3 uppercase text-sm font-semibold">Dashboard</span>
                             </button>
                         </li>
+                        <div className="ml-8 text-gray-50">
+                            <button className="block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2" onClick={e=>setFilter({...filter, inventory:false})}>
+                                <img src="/sales.svg" className="w-6 h-6 transition duration-75 text-gray-400  group-hover:text-white inline" alt="" />
+                                <span className="ml-3">Sales</span>
+                            </button>
+                            {
+                                !filter.inventory &&
+                                <div className="ml-12">
+                                    <button onClick={e=>setFilter({...filter,range:"day"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='day'&&page=='home'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Daily</button>
+                                    <button onClick={e=>setFilter({...filter,range:"week"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='week'&&page=='home'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Weekly</button>
+                                    <button onClick={e=>setFilter({...filter,range:"month"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='month'&&page=='home'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Monthly</button>
+                                </div>
+                            }
+                            <button className="block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2" onClick={e=>setFilter({...filter, inventory:true})}>
+                                <img src="/inventory.svg" className="inline w-6 h-6 transition duration-75 text-gray-400  group-hover:text-white" alt="" />
+                                <span className="ml-3">Inventory</span>
+                            </button>
+                            {
+                                filter.inventory &&
+                                <div className="ml-12">
+                                    <button onClick={e=>setFilter({...filter,range:"day"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='day'&&page=='home'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Daily</button>
+                                    <button onClick={e=>setFilter({...filter,range:"week"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='week'&&page=='home'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Weekly</button>
+                                    <button onClick={e=>setFilter({...filter,range:"month"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='month'&&page=='home'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Monthly</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    {
+                        user.role > 1 &&
+                        <div onClick={e=>setPage('activity')}>
+                            <li onClick={e=>setPage('activity')}>
+                                <button className="flex items-center p-2  rounded-lg text-white">
+                                <svg aria-hidden="true" className="flex-shrink-0 w-6 h-6 transition duration-75 text-gray-400 group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                                <span className="flex-1 ml-3  uppercase text-sm font-semibold">Activity</span>
+                                </button>
+                            </li>
+                            <div className="ml-8 text-gray-50">
+                                <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${active=='salesEntry'?'bg-gray-700':''}`} onClick={e=>setActive("salesEntry")}>Sales Entry</button>
+                                <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${active=='inventoryEntry'?'bg-gray-700':''}`} onClick={e=>setActive("inventoryEntry")}>Inventory Entry</button>
+                                <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${active=='lobby'?'bg-gray-700':''}`} onClick={e=>setActive("lobby")}>Lobby</button>
+                                <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${active=='buisness'?'bg-gray-700':''}`} onClick={e=>setActive("buisness")}>Buisness Management</button>
+                                <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${active=='logs'?'bg-gray-700':''}`} onClick={e=>setActive("logs")}>Logs</button>
+                            </div>
+                        </div>
                     }
-                    <li onClick={e=>setPage('download')}>
-                        <button className="flex items-center p-2  rounded-lg text-white hover:bg-gray-700">
-                        <svg aria-hidden="true" className="flex-shrink-0 w-6 h-6 transition duration-75 text-gray-400 group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M8.707 7.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l2-2a1 1 0 00-1.414-1.414L11 7.586V3a1 1 0 10-2 0v4.586l-.293-.293z"></path><path d="M3 5a2 2 0 012-2h1a1 1 0 010 2H5v7h2l1 2h4l1-2h2V5h-1a1 1 0 110-2h1a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"></path></svg>
-                        <span className="flex-1 ml-3 whitespace-nowrap">Download</span>
-                        </button>
-                    </li>
-                    <li onClick={e=>setPage('inbox')}>
-                        <button className="flex items-center p-2  rounded-lg text-white hover:bg-gray-700">
-                        <img className="w-6" src="/message.svg" alt="" />
-                        <span className="flex-1 ml-3 whitespace-nowrap">Inbox</span>
-                        </button>
-                    </li>
+                    <div onClick={e=>setPage('inbox')}>
+                        <li>
+                            <button className="flex items-center p-2  rounded-lg text-white">
+                            <img className="w-6" src="/message.svg" alt="" />
+                            <span className="flex-1 ml-3  uppercase text-sm font-semibold">Inbox</span>
+                            </button>
+                        </li>
+                        <div className="ml-8 text-gray-50">
+                            <button onClick={e=>setActive('reports')} className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${active=='reports'?'bg-gray-700':''}`}>Reports</button>
+                            <button onClick={e=>setActive('suggestions')} className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${active=='suggestions'?'bg-gray-700':''}`}>Suggestions</button>
+                            <button onClick={e=>setActive('notifications')} className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${active=='notifications'?'bg-gray-700':''}`}>Notifications</button>
+                        </div>
+                    </div>
+                    <div onClick={e=>setPage('download')}>
+                        <div>
+                            <div className="flex items-center p-2  rounded-lg text-white">
+                            <svg aria-hidden="true" className="flex-shrink-0 w-6 h-6 transition duration-75 text-gray-400 group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M8.707 7.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l2-2a1 1 0 00-1.414-1.414L11 7.586V3a1 1 0 10-2 0v4.586l-.293-.293z"></path><path d="M3 5a2 2 0 012-2h1a1 1 0 010 2H5v7h2l1 2h4l1-2h2V5h-1a1 1 0 110-2h1a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"></path></svg>
+                            <span className="flex-1 ml-3  uppercase text-sm font-semibold">Download</span>
+                            </div>
+                        </div>
+                        <div className="ml-8 text-gray-50">
+                            <button className="block my-2  hover:bg-gray-700 w-full py-1 text-left pl-2" onClick={e=>{setActive("salesDownload");setFilter({...filter,inventory:false})}}>Sales Report</button>
+                            <button className="block my-2  hover:bg-gray-700 w-full py-1 text-left pl-2" onClick={e=>{setActive("inventoryDownload");setFilter({...filter,inventory:true})}}>Inventory Report</button>
+                        </div>
+                    </div>
                     <li onClick={e=>setPage('settings')}>
                         <button className="flex items-center p-2  rounded-lg text-white hover:bg-gray-700">
                         <img className="w-6" src="/settings.svg" alt="" />
-                        <span className="flex-1 ml-3 whitespace-nowrap">Settings</span>
+                        <span className="flex-1 ml-3  uppercase text-sm font-semibold">Settings</span>
                         </button>
                     </li>
                 </ul>
@@ -153,7 +205,8 @@ export default function Dashboard(){
                 {page === 'home' && <Home />}
                 {page === 'settings' && <Settings />}
                 {page === 'download' && <Download />}
-                {page === 'activity' && <Activity />}
+                {page === 'activity' && <Activity page={active} />}
+                {page === 'inbox' && <Inbox page={active} />}
             </div>
         </div>
     )

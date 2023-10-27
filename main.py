@@ -10,19 +10,19 @@ import hashlib
 #CREATE TABLE inventory (id INT AUTO_INCREMENT PRIMARY KEY, hotel VARCHAR(255), purchases INT, grossales INT, netsales INT,  opening INT, closing INT , date VARCHAR(255))
 #CREATE TABLE buisness (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), type VARCHAR(255))
 
-# con = mysql.connector.connect(
-#   host="q0h7yf5pynynaq54.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-#   user="gy5j42gpyobqtvwo",
-#   password="lkvtu6t4jiwypttw",
-#   database="myuskezvmard4yzb"
-# )
-
 con = mysql.connector.connect(
-  host="localhost",
-  user="sammy",
-  password="sammy",
-  database="hotelhub"
+  host="q0h7yf5pynynaq54.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
+  user="gy5j42gpyobqtvwo",
+  password="lkvtu6t4jiwypttw",
+  database="myuskezvmard4yzb"
 )
+
+# con = mysql.connector.connect(
+#   host="localhost",
+#   user="sammy",
+#   password="sammy",
+#   database="hotelhub"
+# )
 cur = con.cursor(buffered=True)
 
 app = Flask(__name__, static_folder='frontend/dist')

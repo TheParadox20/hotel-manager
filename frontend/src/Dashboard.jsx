@@ -87,8 +87,8 @@ export default function Dashboard(){
                             <p className="text-sm  text-white" role="none">
                             {user.username}
                             </p>
-                            <p className="text-sm font-medium truncate text-gray-300" role="none">
-                            {user.email}
+                            <p className="mt-2 text-sm font-medium truncate text-gray-300" role="none">
+                            {['Sales Executive','Supervisor','Manager','Admin'][user.role-1]}
                             </p>
                         </div>
                         <ul className="py-1" role="none">
@@ -125,7 +125,7 @@ export default function Dashboard(){
                                 <span className="ml-3">Sales</span>
                             </button>
                             {
-                                !filter.inventory &&
+                                (!filter.inventory&&page=='home') &&
                                 <div className="ml-12">
                                     <button onClick={e=>setFilter({...filter,range:"day"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='day'&&page=='home'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Daily</button>
                                     <button onClick={e=>setFilter({...filter,range:"week"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='week'&&page=='home'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Weekly</button>
@@ -137,7 +137,7 @@ export default function Dashboard(){
                                 <span className="ml-3">Inventory</span>
                             </button>
                             {
-                                filter.inventory &&
+                                (filter.inventory&&page=='home') &&
                                 <div className="ml-12">
                                     <button onClick={e=>setFilter({...filter,range:"day"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='day'&&page=='home'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Daily</button>
                                     <button onClick={e=>setFilter({...filter,range:"week"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='week'&&page=='home'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Weekly</button>
@@ -186,13 +186,29 @@ export default function Dashboard(){
                         </div>
                         <div className="ml-8 text-gray-50">
                             <button className="block my-2  hover:bg-gray-700 w-full py-1 text-left pl-2" onClick={e=>{setActive("salesDownload");setFilter({...filter,inventory:false})}}>Sales Report</button>
+                            {
+                                (!filter.inventory&&page=='download') &&
+                                <div className="ml-12">
+                                    <button onClick={e=>setFilter({...filter,range:"day"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='day'&&page=='download'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Daily</button>
+                                    <button onClick={e=>setFilter({...filter,range:"week"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='week'&&page=='download'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Weekly</button>
+                                    <button onClick={e=>setFilter({...filter,range:"month"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='month'&&page=='download'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Monthly</button>
+                                </div>
+                            }
                             <button className="block my-2  hover:bg-gray-700 w-full py-1 text-left pl-2" onClick={e=>{setActive("inventoryDownload");setFilter({...filter,inventory:true})}}>Inventory Report</button>
+                            {
+                                (filter.inventory&&page=='download') &&
+                                <div className="ml-12">
+                                    <button onClick={e=>setFilter({...filter,range:"day"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='day'&&page=='download'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Daily</button>
+                                    <button onClick={e=>setFilter({...filter,range:"week"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='week'&&page=='download'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Weekly</button>
+                                    <button onClick={e=>setFilter({...filter,range:"month"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='month'&&page=='download'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Monthly</button>
+                                </div>
+                            }
                         </div>
                     </div>
                     <li onClick={e=>setPage('settings')}>
-                        <button className="flex items-center p-2  rounded-lg text-white hover:bg-gray-700">
-                        <img className="w-6" src="/settings.svg" alt="" />
-                        <span className="flex-1 ml-3  uppercase text-sm font-semibold">Settings</span>
+                        <button className="w-full block text-left p-3  rounded-lg text-white hover:bg-gray-700">
+                        <img className="w-6 inline" src="/settings.svg" alt="" />
+                        <span className="ml-3  uppercase text-sm font-semibold">Settings</span>
                         </button>
                     </li>
                 </ul>

@@ -129,7 +129,7 @@ export default function Filter(){
                     </div>
                 <button onClick={e=>{toggler(e,"weeks")}} className="w-full py-4 hover:scale-105 hover:bg-gray-800"><img className="inline w-6 mx-2" src="/date.svg" alt="" />Date</button>
                     <div id="weeks" className="hidden origin-top-left absolute left-4 mt-2 w-48 rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5">
-                        <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                        <div className="py-1 max-h-44 overflow-y-scroll" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                             {filter.range === 'day' && <Days/>}
                             {filter.range === 'week' && <Weeks/>}
                             {filter.range === 'month' && <Months/>}

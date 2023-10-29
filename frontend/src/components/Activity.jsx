@@ -5,6 +5,7 @@ import Lobby from "./activities/Lobby"
 import Inventory from "./activities/Inventory"
 import Buisness from "./activities/Buisness"
 import Logs from "./activities/Logs"
+import Target from "./activities/Targets"
 import { Context } from "../ContextProvider"
 
 export default function Activity({page}){
@@ -27,6 +28,7 @@ export default function Activity({page}){
             {page === "inventoryEntry" && <Inventory />}
             {page === "buisness" && <Buisness />}
             {page === "logs" && <Logs />}
+            {page === "target" && <Target />}
         </div>
         </>
     )

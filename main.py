@@ -4,8 +4,8 @@ from flask_cors import CORS
 import mysql.connector
 import hashlib
 
-#CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, role INT, username VARCHAR(255), name VARCHAR(255), email VARCHAR(255), password VARCHAR(64), phone INT)
-#CREATE TABLE admission (id INT AUTO_INCREMENT PRIMARY KEY, role INT, username VARCHAR(255), name VARCHAR(255), email VARCHAR(255), password VARCHAR(64), phone INT)
+#CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, role INT, username VARCHAR(255), name VARCHAR(255), buisness VARCHAR(255), password VARCHAR(64), phone INT)
+#CREATE TABLE admission (id INT AUTO_INCREMENT PRIMARY KEY, role INT, username VARCHAR(255), name VARCHAR(255), buisness VARCHAR(255), password VARCHAR(64), phone INT)
 #CREATE TABLE sales (id INT AUTO_INCREMENT PRIMARY KEY, hotel VARCHAR(255), section VARCHAR(255), supervisor VARCHAR(255), waitstuff VARCHAR(255), target INT, actual INT, date VARCHAR(255))
 #CREATE TABLE inventory (id INT AUTO_INCREMENT PRIMARY KEY, hotel VARCHAR(255), purchases INT, grossales INT, netsales INT,  opening INT, closing INT , date VARCHAR(255))
 #CREATE TABLE buisness (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), type VARCHAR(255))
@@ -46,7 +46,11 @@ def test():
 @app.route("/signup", methods=["POST"])
 def signup():
     data = request.get_json()
-    cur.execute("INSERT INTO admission (role, username, name, email, password, phone) VALUES (%s, %s, %s, %s, %s, %s)", (data["role"], data["username"], data["name"], data["email"], hashlib.sha256(data["password"].encode()).hexdigest(), data['phone']))
+    cur.execute("SELECT * FROM buisness WHERE name = %s", (data["buisness"],))
+    buisness = cur.fetchone()
+    if not buisness and data["role"] != 4:
+        return {"status":"error","response":"Buisness does not exist"}
+    cur.execute("INSERT INTO admission (role, username, name, buisness, password, phone) VALUES (%s, %s, %s, %s, %s, %s)", (data["role"], data["username"], data["name"], data["buisness"], hashlib.sha256(data["password"].encode()).hexdigest(), data['phone']))
     con.commit()
     return {"status":"success"}
 
@@ -64,7 +68,7 @@ def admit():
     cur.execute("SELECT * FROM admission WHERE id = %s", (data["id"],))
     user = cur.fetchone()
     if data.get('choice') == "yes":
-        cur.execute("INSERT INTO users (role, username, name, email, password, phone) VALUES (%s, %s, %s, %s, %s, %s)", (user[1], user[2], user[3], user[4], user[5], user[6]))
+        cur.execute("INSERT INTO users (role, username, name, buisness, password, phone) VALUES (%s, %s, %s, %s, %s, %s)", (user[1], user[2], user[3], user[4], user[5], user[6]))
         con.commit()
         cur.execute("DELETE FROM admission WHERE id = %s", (data["id"],))
         con.commit()
@@ -87,7 +91,7 @@ def login():
     if user:
         session["user"] = user
         print("### Session var :: ",session["user"])
-        return {"status":"success","response":{ "role":user[1], "username":user[2], "email":user[4]}}
+        return {"status":"success","response":{ "role":user[1], "username":user[2], "buisness":user[4]}}
     else:
         return {"status":"error","response":"Invalid username or password"}
 
@@ -110,7 +114,7 @@ def sales():
 def sessioncheck():
     user = session.get("user")
     if user:
-        return {"status":"success","response":{ "role":user[1], "username":user[2], "email":user[4]}}
+        return {"status":"success","response":{ "role":user[1], "username":user[2], "buisness":user[4]}}
     else:
         return {"status":"error","response":"Session expired"}
 

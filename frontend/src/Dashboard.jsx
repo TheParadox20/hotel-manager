@@ -107,6 +107,9 @@ export default function Dashboard(){
                             <p className="text-sm  text-white" role="none">
                             {user.username}
                             </p>
+                            <p className="text-sm  text-white" role="none">
+                            {user.buisness}
+                            </p>
                             <p className="mt-2 text-sm font-medium truncate text-gray-300" role="none">
                             {['Sales Executive','Supervisor','Manager','Admin'][user.role-1]}
                             </p>
@@ -180,6 +183,7 @@ export default function Dashboard(){
                                 <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(active=='inventoryEntry' && page=='activity')?'bg-gray-700':''}`} onClick={e=>setActive("inventoryEntry")}>Inventory Entry</button>
                                 <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(active=='lobby' && page=='activity')?'bg-gray-700':''}`} onClick={e=>setActive("lobby")}>Lobby</button>
                                 <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(active=='buisness' && page=='activity')?'bg-gray-700':''}`} onClick={e=>setActive("buisness")}>Buisness Management</button>
+                                <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(active=='target' && page=='activity')?'bg-gray-700':''}`} onClick={e=>setActive("target")}>Set Targets</button>
                                 <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(active=='logs' && page=='activity')?'bg-gray-700':''}`} onClick={e=>setActive("logs")}>Logs</button>
                             </div>
                         </div>

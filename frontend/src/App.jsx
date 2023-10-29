@@ -18,12 +18,12 @@ export default function App() {
         }
         setUser({username:data.response.username,role:data.response.role,email:data.response.email})
       }else if(data.status === 'error'){
-        // setUser(null)
+        setUser(null)
         if(JSON.parse(localStorage.getItem('user')).username) {
           alert(data.response);
           localStorage.removeItem('user')
         }
-        setAuthorized(true);
+        setAuthorized(false);
       }
     }).catch(err => {alert('Server error, can\'t get session info')})
     if(user){

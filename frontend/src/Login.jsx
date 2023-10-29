@@ -8,7 +8,7 @@ export default function Login() {
     let [signup, setSignup] = useState(false)
     let [username, setUsername] = useState('')
     let [name, setName] = useState('')
-    let [email, setEmail] = useState('')
+    let [buisness, setBuisness] = useState('')
     let [role, setRole] = useState(1)
     let [password, setPassword] = useState('')
     let [phone, setPhone] = useState('')
@@ -30,8 +30,8 @@ export default function Login() {
             console.log(data)
             if(data.status === 'success'){
                 console.log('login')
-                localStorage.setItem('user',JSON.stringify({username:data.response.username,role:data.response.role,email:data.response.email}))
-                setUser({username:data.response.username,role:data.response.role,email:data.response.email})
+                localStorage.setItem('user',JSON.stringify({username:data.response.username,role:data.response.role,buisness:data.response.buisness}))
+                setUser({username:data.response.username,role:data.response.role,buisness:data.response.buisness})
             }else if(data.status === 'error'){
                 alert(data.response)
             }
@@ -49,14 +49,14 @@ export default function Login() {
                 username:username,
                 password:password,
                 name:name,
-                email:email,
+                buisness:buisness,
                 role:role,
                 phone:phone
             })
         }).then(res => res.json()).then(data => {
             console.log(data)
             if(data.status === 'success') setSignup(false)
-            if(data.status === 'failed') alert(data.message)
+            if(data.status === 'error') alert(data.response)
         }).catch(err => alert("server error"))
     }
     
@@ -107,24 +107,6 @@ export default function Login() {
                             </div>
 
                             <div>
-                                <label htmlFor="email" className="block text-sm font-medium leading-6">
-                                    Email address
-                                </label>
-                                <div className="mt-2">
-                                    <input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    autoComplete="mail"
-                                    placeholder='jane@example.com'
-                                    value={email}
-                                    onChange={(e)=>setEmail(e.target.value)}
-                                    className="pl-2 text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-0 sm:text-sm sm:leading-6"
-                                    />
-                                </div>
-                            </div>
-
-                            <div>
                                 <label htmlFor="phone" className="block text-sm font-medium leading-6">
                                     Phone number
                                 </label>
@@ -146,13 +128,29 @@ export default function Login() {
                                 </label>
                                 <select className="pl-2 text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-0 sm:text-sm sm:leading-6" value={role} onChange={event =>{setRole(event.target.value)}} >
                                     <option value={1}>Sales executive</option>
-                                    <option value={3}>Clerk</option>
-                                    <option value={2}>Accountant</option>
-                                    <option value={4}>Supervisor</option>
-                                    <option value={5}>Manager</option>
-                                    <option value={6}>Admin</option>
+                                    <option value={2}>Supervisor</option>
+                                    <option value={3}>Manager</option>
+                                    <option value={4}>Admin</option>
                                 </select>
                             </div>
+                            {
+                                role!=4 &&
+                                <div>
+                                    <label htmlFor="buisness" className="block text-sm font-medium leading-6">
+                                        Buisness
+                                    </label>
+                                    <div className="mt-2">
+                                        <input
+                                        id="buisness"
+                                        name="buisness"
+                                        type="text"
+                                        value={buisness}
+                                        onChange={(e)=>setBuisness(e.target.value)}
+                                        className="pl-2 text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-0 sm:text-sm sm:leading-6"
+                                        />
+                                    </div>
+                                </div>
+                            }
                         </>
                 )}
 

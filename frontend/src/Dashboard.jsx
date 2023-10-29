@@ -6,15 +6,33 @@ import Settings from "./components/Settings"
 import Activity from "./components/Activity"
 import Download from "./components/Download"
 import Inbox from "./components/Inbox"
+import { getWeeksOfMonth } from "./components/Calender";
 import {baseURL} from "./data.json"
 
 export default function Dashboard(){
-    let { User, HotelData, Filters } = useContext(Context);
+    let { User, HotelData, Filters, InventoryData, DisplayData } = useContext(Context);
     let [hotelData, setHotelData] = HotelData;
+    let [inventory, setInventory] = InventoryData;
+    let [display, setDisplay] = DisplayData;
     let [filter, setFilter] = Filters;
     let [user, setUser] = User;
     let [page, setPage] = useState('home')
     let [active, setActive] = useState('sales')
+
+    let rangeFilter=()=>{
+        if (filter.range=='day') 
+            if(!filter.inventory)   return hotelData
+            else                    return inventory
+        if (filter.range=='week'){
+            return []
+        }
+        if (filter.range=='month'){
+            let months = ['January','February','March','April','May','June','July','August','September','October','November','December']
+            if(!filter.inventory){
+            }
+            else{}
+        }
+    }
 
     //if not logged in, redirect to login page via useEffect
     useEffect(()=>{
@@ -22,23 +40,25 @@ export default function Dashboard(){
         fetch(`${baseURL}/getsales`).then(res => res.json()).then(data => {
             console.log('fetching :: ',data)
             setHotelData(data.sales)
+            setDisplay(data.sales)
         }).catch(err => alert("server error, can't fetch sales data"))
+        fetch(`${baseURL}/getinventory`).then(res => res.json()).then(data => {
+            console.log('fetching :: ',data)
+            setInventory(data.response)
+        }).catch(err => alert("server error, can't fetch inventory data"))
     },[])
     useEffect(() => {
         if(filter.inventory){
             console.log('fetching inventory')
-            fetch(`${baseURL}/getinventory`).then(res => res.json()).then(data => {
-                console.log('fetching :: ',data)
-                setHotelData(data.response)
-            }).catch(err => alert("server error, can't fetch inventory data"))
+            setDisplay(inventory)
         }else{
             console.log('fetching sales')
-            fetch(`${baseURL}/getsales`).then(res => res.json()).then(data => {
-                console.log('fetching :: ',data)
-                setHotelData(data.sales)
-            }).catch(err => alert("server error, can't fetch sales data"))
+            setDisplay(hotelData)
         }
     }, [filter.inventory]);
+    useEffect(()=>{
+        setDisplay([...rangeFilter()])
+    },[filter.range])
 
     let logout = (e) => {
         e.preventDefault()
@@ -156,11 +176,11 @@ export default function Dashboard(){
                                 </button>
                             </li>
                             <div className="ml-8 text-gray-50">
-                                <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${active=='salesEntry'?'bg-gray-700':''}`} onClick={e=>setActive("salesEntry")}>Sales Entry</button>
-                                <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${active=='inventoryEntry'?'bg-gray-700':''}`} onClick={e=>setActive("inventoryEntry")}>Inventory Entry</button>
-                                <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${active=='lobby'?'bg-gray-700':''}`} onClick={e=>setActive("lobby")}>Lobby</button>
-                                <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${active=='buisness'?'bg-gray-700':''}`} onClick={e=>setActive("buisness")}>Buisness Management</button>
-                                <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${active=='logs'?'bg-gray-700':''}`} onClick={e=>setActive("logs")}>Logs</button>
+                                <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(active=='salesEntry' && page=='activity')?'bg-gray-700':''}`} onClick={e=>setActive("salesEntry")}>Sales Entry</button>
+                                <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(active=='inventoryEntry' && page=='activity')?'bg-gray-700':''}`} onClick={e=>setActive("inventoryEntry")}>Inventory Entry</button>
+                                <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(active=='lobby' && page=='activity')?'bg-gray-700':''}`} onClick={e=>setActive("lobby")}>Lobby</button>
+                                <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(active=='buisness' && page=='activity')?'bg-gray-700':''}`} onClick={e=>setActive("buisness")}>Buisness Management</button>
+                                <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(active=='logs' && page=='activity')?'bg-gray-700':''}`} onClick={e=>setActive("logs")}>Logs</button>
                             </div>
                         </div>
                     }
@@ -172,9 +192,9 @@ export default function Dashboard(){
                             </button>
                         </li>
                         <div className="ml-8 text-gray-50">
-                            <button onClick={e=>setActive('reports')} className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${active=='reports'?'bg-gray-700':''}`}>Reports</button>
-                            <button onClick={e=>setActive('suggestions')} className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${active=='suggestions'?'bg-gray-700':''}`}>Suggestions</button>
-                            <button onClick={e=>setActive('notifications')} className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${active=='notifications'?'bg-gray-700':''}`}>Notifications</button>
+                            <button onClick={e=>setActive('reports')} className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(active=='reports' && page=='inbox')?'bg-gray-700':''}`}>Reports</button>
+                            <button onClick={e=>setActive('suggestions')} className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(active=='suggestions' && page=='inbox')?'bg-gray-700':''}`}>Suggestions</button>
+                            <button onClick={e=>setActive('notifications')} className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(active=='notifications' && page=='inbox')?'bg-gray-700':''}`}>Notifications</button>
                         </div>
                     </div>
                     <div onClick={e=>setPage('download')}>

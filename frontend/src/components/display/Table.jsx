@@ -1,10 +1,9 @@
 import { useContext } from "react";
 import { Context } from "../../ContextProvider";
-import { getWeeksOfMonth } from "../Calender";
 
 export default function Table(){
-    let { HotelData, Filters } = useContext(Context);
-    let [hotelData, setHotelData] = HotelData;
+    let { DisplayData, Filters } = useContext(Context);
+    let [hotelData, setHotelData] = DisplayData;
     let [filter, setFilter] = Filters;
 
     let compute = ()=>{//creates new 2d array with the required data

@@ -10,11 +10,13 @@ export function ContextProvider({ children }) {
         email:"sam@me.com",
         role:4
     })
-    let Filters = useState({start:0,end:0,depth:[],epoch:(getWeeksOfMonth(new Date().getFullYear(),new Date().getMonth())[0].epoch),descending:true,sort:0,inventory:false,range:"week"})
+    let Filters = useState({start:0,end:0,depth:[],epoch:(getWeeksOfMonth(new Date().getFullYear(),new Date().getMonth())[0].epoch),descending:true,sort:0,inventory:false,range:"day"})
     let HotelData = useState([])
+    let InventoryData = useState([])
+    let DisplayData = useState([])
 
     return (
-        <Context.Provider value={{ User, Filters, HotelData }}>
+        <Context.Provider value={{ User, Filters, HotelData, InventoryData, DisplayData }}>
             {children}
         </Context.Provider>
     )

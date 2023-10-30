@@ -130,7 +130,6 @@ export default function Table(){
                 {
                     10-hotelData.length>0?
                     [...Array((20-hotelData.length))].map((item,index)=>{
-                        console.log(index)
                         return(
                             <tr className="bg-gray-800 border-b border-gray-700">
                                 {[...Array((filter.depth.length==0?9:6))].map((item,index)=>{

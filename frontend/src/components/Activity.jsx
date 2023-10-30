@@ -6,6 +6,7 @@ import Inventory from "./activities/Inventory"
 import Buisness from "./activities/Buisness"
 import Logs from "./activities/Logs"
 import Target from "./activities/Targets"
+import Users from "./activities/Users"
 import { Context } from "../ContextProvider"
 
 export default function Activity({page}){
@@ -29,6 +30,7 @@ export default function Activity({page}){
             {page === "buisness" && <Buisness />}
             {page === "logs" && <Logs />}
             {page === "target" && <Target />}
+            {page === "users" && <Users />}
         </div>
         </>
     )

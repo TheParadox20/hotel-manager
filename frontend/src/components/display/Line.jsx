@@ -11,7 +11,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import { useContext } from 'react';
 import { Context } from '../../ContextProvider';
-import { getDatesOfWeek, getDaySuffix } from '../Calender';
+import { getDaySuffix, getDatesInRange } from '../Calender';
 
 ChartJS.register(
   CategoryScale,
@@ -54,7 +54,7 @@ export default function Lyn() {
   };
 
 
-  let dates = getDatesOfWeek(filter.epoch);
+  let dates = getDatesInRange(filter.start, filter.end);
   let labels = dates.map((date)=>{
     date = date.split('-');
     return `${date[1].slice(0,3)} ${date[2]}${getDaySuffix(date[2])}`

@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from "react"
 import { Context } from "../ContextProvider"
-import { getWeeksOfMonth } from "./Calender"
+import Calender from "./Calender"
+import { getWeeksOfMonth,getDaySuffix } from "./Calender"
 
 let toggler = (e,id) => {
     e.preventDefault()
@@ -89,12 +90,23 @@ export default function Filter(){
     let [hotelData, setHotelData] = HotelData;
     let [filter, setFilter] = Filters;
     let [search,setSearch] = useState('');
+    //date control
+    let endDate = new Date();
+    let startDate = new Date();
+    startDate.setDate(endDate.getDate() - 7);
+    let EndDate = useState([endDate.getFullYear(),endDate.getMonth(),endDate.getDate()])
+    let StartDate = useState([startDate.getFullYear(),startDate.getMonth(),startDate.getDate()])
+    let [isStart, setIsStart] = useState(true)
 
     console.log('filter :: ',filter);
 
+    useEffect(()=>{
+        setFilter({...filter, start:StartDate[0], end:EndDate[0]})
+    },[StartDate[0],EndDate[0]])
+
     return(
         <>
-        <div className="flex flex-col order-first lg:order-last  rounded bg-gray-800 text-gray-50 h-96 w-full md:w-2/3 lg:w-3/4 mx-auto relative px-2 overflow-y-scroll">
+        <div className="flex flex-col rounded bg-gray-800 text-gray-50 h-96 w-full mx-auto relative px-2 overflow-y-scroll">
             <div className="flex my-4">
                 <img className="w-4 mx-2" src="/filter.svg" alt="" />
                 <h3 className="text-xl font-semibold">Filter</h3>
@@ -128,11 +140,17 @@ export default function Filter(){
                         </div>
                     </div>
                 <button onClick={e=>{toggler(e,"weeks")}} className="w-full py-4 hover:scale-105 hover:bg-gray-800"><img className="inline w-6 mx-2" src="/date.svg" alt="" />Date</button>
-                    <div id="weeks" className="hidden origin-top-left absolute left-4 mt-2 w-48 rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5">
-                        <div className="py-1 max-h-44 overflow-y-scroll" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                            {filter.range === 'day' && <Days/>}
-                            {filter.range === 'week' && <Weeks/>}
-                            {filter.range === 'month' && <Months/>}
+                    <div id="weeks" className="hidden origin-top-left absolute left-4 mt-2 rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5 overflow-y-scroll max-h-96">
+                        <div className="flex justify-between mx-2 my-1">
+                            <div>{`${(new Date(filter.start[0],filter.start[1],1)).toLocaleString('default', {month:'long'})}-${filter.start[2]}${getDaySuffix(filter.start[2])}`} to {`${(new Date(filter.end[0],filter.end[1],1)).toLocaleString('default', {month:'long'})}-${filter.end[2]}${getDaySuffix(filter.end[2])}`}</div>
+                            <button onClick={e=>{toggler(e,"weeks")}} className="">X</button>
+                        </div>
+                        <div className="flex flex-col px-1">
+                            <div className="flex justify-around">
+                                <button className={`py-2 w-full mx-1 hover:scale-105 rounded-t-lg bg-gray-800 my-1 ${isStart?'font-semibold':''}`} onClick={e=>setIsStart(true)}>start</button>
+                                <button className={`py-2 w-full mx-1 hover:scale-105 rounded-t-lg bg-gray-800 my-1 ${!isStart?'font-semibold':''}`} onClick={e=>setIsStart(false)}>end</button>
+                            </div>
+                            <Calender date={isStart?StartDate:EndDate}/>
                         </div>
                     </div>
             </div>

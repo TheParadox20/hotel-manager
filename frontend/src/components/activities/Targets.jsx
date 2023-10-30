@@ -32,8 +32,8 @@ function Row({name,setSum, standing}){
         <tr className="bg-gray-800 border-b border-gray-700">
             <td className="px-6 py-3">{name}</td>
             <td className="px-6 py-3"><input value={amount} onChange={e=>setAmount(e.target.value)} className="w-3/4 md:w-fit bg-gray-200 text-black" type="number" /></td>
-            <td className="px-6 py-3"><input value={note} onChange={e=>setNote(e.target.value)} className="w-3/4 md:w-fit bg-gray-200 text-black whitespace-normal" type="text" /></td>
-            <td className="md:px-6 py-2 md:py-0"><button className="py-2 w-full bg-gray-900 font-mono my-1 hover:uppercase" onClick={e=>submit(e)}>Set</button></td>
+            <td className="px-6 py-3 min-h-96"><input value={note} onChange={e=>setNote(e.target.value)} className="w-3/4 md:w-fit bg-gray-200 text-black whitespace-normal h-12" type="text" /></td>
+            <td className="md:px-6 py-2 md:py-0"><button className="py-2 px-4 w-full bg-gray-900 font-mono my-1 hover:uppercase" onClick={e=>submit(e)}>Set</button></td>
         </tr>
     )
 }
@@ -66,7 +66,7 @@ export default function Target(){
                     <h3 className="">Set target</h3>
                     <h3 className={`${sum-command>=0?'text-green-500':'text-red-500'}`}>{`${sum-command>=0?'+':'-'}${sum-command}`}.sh</h3>
                 </div>
-                <table className="w-full text-sm text-left text-gray-400 table-auto">
+                <table className="w-full text-sm text-left text-gray-400 table-auto overflow-x-scroll">
                     <thead className="text-xs text-gray-100 uppercase bg-blue-900 sticky top-0">
                         <tr>
                             {user.role==4 && <th className="px-6 py-3">Hotel</th>}

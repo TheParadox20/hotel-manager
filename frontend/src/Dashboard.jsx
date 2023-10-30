@@ -6,7 +6,6 @@ import Settings from "./components/Settings"
 import Activity from "./components/Activity"
 import Download from "./components/Download"
 import Inbox from "./components/Inbox"
-import { getWeeksOfMonth } from "./components/Calender";
 import {baseURL} from "./data.json"
 
 export default function Dashboard(){
@@ -20,32 +19,34 @@ export default function Dashboard(){
     let [active, setActive] = useState('sales')
 
     let rangeFilter=()=>{
-        if (filter.range=='day') 
-            if(!filter.inventory)   return hotelData
-            else                    return inventory
-        if (filter.range=='week'){
-            return []
+        let startDate = new Date(filter.start[0], filter.start[1], filter.start[2]);
+        let endDate = new Date(filter.end[0], filter.end[1], filter.end[2]);
+        if (!filter.inventory && hotelData.length!=0){
+            return hotelData.filter(row => {
+                const date = new Date(row[row.length - 1]);
+                return date >= startDate && date <= endDate;
+            });
         }
-        if (filter.range=='month'){
-            let months = ['January','February','March','April','May','June','July','August','September','October','November','December']
-            if(!filter.inventory){
-            }
-            else{}
+        if (filter.inventory && inventory.length!=0){
+            return inventory.filter(row => {
+                const date = new Date(row[row.length - 1]);
+                return date >= startDate && date <= endDate;
+            });
         }
+        return []
     }
 
     //if not logged in, redirect to login page via useEffect
     useEffect(()=>{
         initFlowbite();
         fetch(`${baseURL}/getsales`).then(res => res.json()).then(data => {
-            console.log('fetching :: ',data)
             setHotelData(data.sales)
             setDisplay(data.sales)
+            //then fetch inventory
+            fetch(`${baseURL}/getinventory`).then(res => res.json()).then(data => {
+                setInventory(data.response)
+            }).catch(err => alert("server error, can't fetch inventory data"))
         }).catch(err => alert("server error, can't fetch sales data"))
-        fetch(`${baseURL}/getinventory`).then(res => res.json()).then(data => {
-            console.log('fetching :: ',data)
-            setInventory(data.response)
-        }).catch(err => alert("server error, can't fetch inventory data"))
     },[])
     useEffect(() => {
         if(filter.inventory){
@@ -58,7 +59,7 @@ export default function Dashboard(){
     }, [filter.inventory]);
     useEffect(()=>{
         setDisplay([...rangeFilter()])
-    },[filter.range])
+    },[filter.start, filter.end])
 
     let logout = (e) => {
         e.preventDefault()
@@ -143,30 +144,22 @@ export default function Dashboard(){
                             </button>
                         </li>
                         <div className="ml-8 text-gray-50">
-                            <button className="block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2" onClick={e=>setFilter({...filter, inventory:false})}>
+                            <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(!filter.inventory && page=='home')?'bg-gray-700':''}`} onClick={e=>setFilter({...filter, inventory:false})}>
                                 <img src="/sales.svg" className="w-6 h-6 transition duration-75 text-gray-400  group-hover:text-white inline" alt="" />
                                 <span className="ml-3">Sales</span>
                             </button>
                             {
-                                (!filter.inventory&&page=='home') &&
+                                (!filter.inventory&&page=='home'&&false) &&
                                 <div className="ml-12">
                                     <button onClick={e=>setFilter({...filter,range:"day"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='day'&&page=='home'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Daily</button>
                                     <button onClick={e=>setFilter({...filter,range:"week"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='week'&&page=='home'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Weekly</button>
                                     <button onClick={e=>setFilter({...filter,range:"month"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='month'&&page=='home'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Monthly</button>
                                 </div>
                             }
-                            <button className="block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2" onClick={e=>setFilter({...filter, inventory:true})}>
+                            <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(filter.inventory && page=='home')?'bg-gray-700':''}`} onClick={e=>setFilter({...filter, inventory:true})}>
                                 <img src="/inventory.svg" className="inline w-6 h-6 transition duration-75 text-gray-400  group-hover:text-white" alt="" />
                                 <span className="ml-3">Inventory</span>
                             </button>
-                            {
-                                (filter.inventory&&page=='home') &&
-                                <div className="ml-12">
-                                    <button onClick={e=>setFilter({...filter,range:"day"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='day'&&page=='home'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Daily</button>
-                                    <button onClick={e=>setFilter({...filter,range:"week"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='week'&&page=='home'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Weekly</button>
-                                    <button onClick={e=>setFilter({...filter,range:"month"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='month'&&page=='home'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Monthly</button>
-                                </div>
-                            }
                         </div>
                     </div>
                     {
@@ -183,6 +176,7 @@ export default function Dashboard(){
                                 <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(active=='inventoryEntry' && page=='activity')?'bg-gray-700':''}`} onClick={e=>setActive("inventoryEntry")}>Inventory Entry</button>
                                 <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(active=='lobby' && page=='activity')?'bg-gray-700':''}`} onClick={e=>setActive("lobby")}>Lobby</button>
                                 <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(active=='buisness' && page=='activity')?'bg-gray-700':''}`} onClick={e=>setActive("buisness")}>Buisness Management</button>
+                                <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(active=='users' && page=='activity')?'bg-gray-700':''}`} onClick={e=>setActive("users")}>User Management</button>
                                 <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(active=='target' && page=='activity')?'bg-gray-700':''}`} onClick={e=>setActive("target")}>Set Targets</button>
                                 <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(active=='logs' && page=='activity')?'bg-gray-700':''}`} onClick={e=>setActive("logs")}>Logs</button>
                             </div>
@@ -209,24 +203,8 @@ export default function Dashboard(){
                             </div>
                         </div>
                         <div className="ml-8 text-gray-50">
-                            <button className="block my-2  hover:bg-gray-700 w-full py-1 text-left pl-2" onClick={e=>{setActive("salesDownload");setFilter({...filter,inventory:false})}}>Sales Report</button>
-                            {
-                                (!filter.inventory&&page=='download') &&
-                                <div className="ml-12">
-                                    <button onClick={e=>setFilter({...filter,range:"day"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='day'&&page=='download'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Daily</button>
-                                    <button onClick={e=>setFilter({...filter,range:"week"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='week'&&page=='download'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Weekly</button>
-                                    <button onClick={e=>setFilter({...filter,range:"month"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='month'&&page=='download'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Monthly</button>
-                                </div>
-                            }
-                            <button className="block my-2  hover:bg-gray-700 w-full py-1 text-left pl-2" onClick={e=>{setActive("inventoryDownload");setFilter({...filter,inventory:true})}}>Inventory Report</button>
-                            {
-                                (filter.inventory&&page=='download') &&
-                                <div className="ml-12">
-                                    <button onClick={e=>setFilter({...filter,range:"day"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='day'&&page=='download'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Daily</button>
-                                    <button onClick={e=>setFilter({...filter,range:"week"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='week'&&page=='download'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Weekly</button>
-                                    <button onClick={e=>setFilter({...filter,range:"month"})} className={`block my-1 hover:bg-gray-700 w-full py-1 text-left pl-2 ${filter.range=='month'&&page=='download'?'bg-gray-700':''}`}><img src="/date.svg" className="inline mr-2" alt="" />Monthly</button>
-                                </div>
-                            }
+                            <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(!filter.inventory && page=='download')?'bg-gray-700':''}`} onClick={e=>{setActive("salesDownload");setFilter({...filter,inventory:false})}}>Sales Report</button>
+                            <button className={`block my-2 hover:bg-gray-700 w-full py-1 text-left pl-2 ${(filter.inventory && page=='download')?'bg-gray-700':''}`} onClick={e=>{setActive("inventoryDownload");setFilter({...filter,inventory:true})}}>Inventory Report</button>
                         </div>
                     </div>
                     <li onClick={e=>setPage('settings')}>

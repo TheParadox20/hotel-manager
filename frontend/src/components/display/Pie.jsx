@@ -28,9 +28,9 @@ export const options = {
 
   
 export default function Pie() {
-  let { Filters, HotelData } = useContext(Context);
+  let { Filters, DisplayData } = useContext(Context);
   let [filter, setFilter] = Filters;
-  let [hotelData, setHotelData] = HotelData;
+  let [hotelData, setHotelData] = DisplayData;
 
   let labels = [...new Set(hotelData.map(item=>item[filter.depth.length==0?0:filter.depth[0]]))];
 

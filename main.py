@@ -98,7 +98,7 @@ def login():
 @app.route("/getsales")
 def getsales():
     #create 2d array of sales
-    cur.execute("SELECT hotel, section, supervisor, waitstuff, target, actual, date FROM sales")
+    cur.execute("SELECT hotel, section, supervisor, waitstuff, target, actual, date FROM sales ORDER BY STR_TO_DATE(date, '%Y-%M-%d') ASC, hotel ASC, section ASC, supervisor ASC, waitstuff ASC")
     sales = cur.fetchall()
     return {"sales":sales}
 
@@ -125,7 +125,7 @@ def logout():
 
 @app.route("/getinventory")
 def getinventory():
-    cur.execute("SELECT hotel, purchases, grossales, netsales, opening, closing, date FROM inventory")
+    cur.execute("SELECT hotel, purchases, grossales, netsales, opening, closing, date FROM inventory ORDER BY STR_TO_DATE(date, '%Y-%M-%d') ASC, hotel ASC, purchases ASC")
     inventory = cur.fetchall()
     return {"status":"success","response":inventory}
 

@@ -49,6 +49,32 @@ export function getDatesOfWeek(epoch){
     return dates
 }
 
+export function getDatesInRange(start,end){
+    let monthNames = [
+        "January", "February", "March", "April", "May", "June", "July",
+        "August", "September", "October", "November", "December"
+    ];
+
+    let startDate = new Date(start[0], start[1], start[2]);
+    let endDate = new Date(end[0], end[1], end[2]);
+
+    let dates = [];
+    let currentDate = startDate;
+    while (currentDate <= endDate) {
+    let year = currentDate.getFullYear();
+    let monthName = monthNames[currentDate.getMonth()];
+    let day = currentDate.getDate();
+    let dateString = `${year}-${monthName}-${day}`;
+    dates.push(dateString);
+    currentDate.setDate(currentDate.getDate() + 1);
+    }
+    return dates;
+}
+
+export function getMonthName(month){
+    return ['January','February','March','April','May','June','July','August','September','October','November','December'][month]
+}
+
 export default function Calender({date}) {
     let [calender, setCalender] = date
 
@@ -76,7 +102,7 @@ export default function Calender({date}) {
 
     return (
       <>
-      <div class="flex items-center justify-center py-8 w-full lg:w-2/3 mx-auto">
+      <div class="flex items-center justify-center w-full mx-auto">
         <div class="w-full shadow-lg">
             <div class="md:p-8 p-5 bg-gray-800 rounded-t">
                 <div class="px-4 flex items-center justify-between">
@@ -94,8 +120,7 @@ export default function Calender({date}) {
                             <polyline points="9 6 15 12 9 18" />
                         </svg>
                     </button>
-  
-                    </div>
+                </div>
                 </div>
                 <div class="flex items-center justify-between pt-12 overflow-x-auto">
                     <table class="w-full">

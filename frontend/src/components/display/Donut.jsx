@@ -9,9 +9,9 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 
 export default function Donut() {
-  let { Filters, HotelData } = useContext(Context);
+  let { Filters, DisplayData } = useContext(Context);
   let [filter, setFilter] = Filters;
-  let [hotelData, setHotelData] = HotelData;
+  let [hotelData, setHotelData] = DisplayData;
 
   let options = {
     maintainAspectRatio: false,
@@ -34,9 +34,11 @@ export default function Donut() {
 
   let compute = ()=>{
     let data = []
+    if (!filter.inventory) //sales mode 
     for(let i=0;i<labels.length;i++){
+      console.log('Donut :: ',labels[i])
       let sum = 0
-      hotelData.forEach(row => {if(row[filter.depth.length==0?0:filter.depth[0]]==labels[i]) sum+=row[3]});
+      hotelData.forEach(row => {if(row[filter.depth.length==0?0:filter.depth[0]]==labels[i]) sum+=row[5]});
       data.push(sum/7)
     }
     return data

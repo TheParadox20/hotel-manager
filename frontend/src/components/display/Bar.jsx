@@ -10,7 +10,7 @@ import {
 import { Bar } from 'react-chartjs-2';
 import { useContext } from 'react';
 import { Context } from '../../ContextProvider';
-import { getDatesOfWeek, getDaySuffix } from '../Calender';
+import { getDatesInRange, getDaySuffix } from '../Calender';
   
 ChartJS.register(
   CategoryScale,
@@ -26,7 +26,7 @@ export default function Bur() {
   let [filter, setFilter] = Filters;
   let [hotelData, setHotelData] = HotelData;
 
-  let dates = getDatesOfWeek(filter.epoch);
+  let dates = getDatesInRange(filter.start, filter.end);
   let labels = dates.map((date)=>{
     date = date.split('-');
     return `${date[1].slice(0,3)} ${date[2]}${getDaySuffix(date[2])}`

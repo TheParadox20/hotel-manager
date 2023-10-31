@@ -69,6 +69,17 @@ export default function Sales(){// data entry component
     let Actuals = useState('')
     let Datestamp = useState([(new Date()).getFullYear(),(new Date()).getMonth(),(new Date()).getDate()])
 
+    useEffect(()=>{
+        fetch(`${baseURL}/getStuff`)
+        .then(res => res.json())
+        .then(data => {
+            console.log('\tSALEs\t!!',data)
+            if(data.status=="success"){
+            }
+        }).catch(err => {console.log(err);alert("server error")})
+    },[])
+    useEffect(()=>{},[Datestamp[0]])
+
     let submit = (e) => {
         e.preventDefault()
         fetch(`${baseURL}/sales`,{

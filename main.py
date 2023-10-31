@@ -12,19 +12,19 @@ import hashlib
 #CREATE TABLE buisness (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), type VARCHAR(255))
 #CREATE TABLE sections (id INT AUTO_INCREMENT PRIMARY KEY, buisness VARCHAR(255), name VARCHAR(255))
 
-con = mysql.connector.connect(
-  host="q0h7yf5pynynaq54.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-  user="gy5j42gpyobqtvwo",
-  password="lkvtu6t4jiwypttw",
-  database="myuskezvmard4yzb"
-)
-
 # con = mysql.connector.connect(
-#   host="localhost",
-#   user="sammy",
-#   password="sammy",
-#   database="hotelhub"
+#   host="q0h7yf5pynynaq54.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
+#   user="gy5j42gpyobqtvwo",
+#   password="lkvtu6t4jiwypttw",
+#   database="myuskezvmard4yzb"
 # )
+
+con = mysql.connector.connect(
+  host="localhost",
+  user="sammy",
+  password="sammy",
+  database="hotelhub"
+)
 cur = con.cursor(buffered=True)
 
 app = Flask(__name__, static_folder='frontend/dist')
@@ -245,6 +245,33 @@ def setTarget():
         cur.execute("INSERT INTO targets (buisness, manager, section, supervisor, waitstuff, note, amount, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", ('#', '#', section[0], '#', data["name"], data["note"], data["amount"], data["date"]))
     con.commit()
     return {"status":"success","response":""}
+
+@app.route("/getStuff")
+def getStuff():
+    response = {}
+    cur.execute("SELECT section, waitstuff, amount, date FROM targets WHERE waitstuff != '#'")
+    rows = cur.fetchall()
+    for row in rows:
+        date = row[3]
+        name = row[1]
+        #get user hotel from buisness in users table
+        cur.execute("SELECT buisness FROM users WHERE name = %s", (name,))
+        buisness = cur.fetchone()[0]
+        #get supervisor from targets table where supervisor != '#' and date = date and section = section
+        cur.execute("SELECT supervisor FROM targets WHERE supervisor != '#' AND date = %s AND section = %s", (date, row[0]))
+        supervisor = cur.fetchone()[0]
+        if date not in response:
+            response[date] = {}
+        response[date][name] = {
+            "section":row[0],
+            "target":row[2],
+            "hotel":buisness,
+            "supervisor":supervisor
+        }
+    return {
+        "status":"success",
+        "response": response
+        }
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000),host="0.0.0.0")

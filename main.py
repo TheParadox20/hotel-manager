@@ -12,19 +12,19 @@ import hashlib
 #CREATE TABLE buisness (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), type VARCHAR(255))
 #CREATE TABLE sections (id INT AUTO_INCREMENT PRIMARY KEY, buisness VARCHAR(255), name VARCHAR(255))
 
-# con = mysql.connector.connect(
-#   host="q0h7yf5pynynaq54.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-#   user="gy5j42gpyobqtvwo",
-#   password="lkvtu6t4jiwypttw",
-#   database="myuskezvmard4yzb"
-# )
-
 con = mysql.connector.connect(
-  host="localhost",
-  user="sammy",
-  password="sammy",
-  database="hotelhub"
+  host="q0h7yf5pynynaq54.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
+  user="gy5j42gpyobqtvwo",
+  password="lkvtu6t4jiwypttw",
+  database="myuskezvmard4yzb"
 )
+
+# con = mysql.connector.connect(
+#   host="localhost",
+#   user="sammy",
+#   password="sammy",
+#   database="hotelhub"
+# )
 cur = con.cursor(buffered=True)
 
 app = Flask(__name__, static_folder='frontend/dist')
@@ -268,6 +268,7 @@ def getStuff():
             "hotel":buisness,
             "supervisor":supervisor
         }
+    print(response)
     return {
         "status":"success",
         "response": response

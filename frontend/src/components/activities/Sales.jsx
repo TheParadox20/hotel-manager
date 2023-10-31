@@ -2,10 +2,9 @@ import { useState, useEffect, useContext } from "react"
 import { Context } from "../../ContextProvider"
 import {baseURL} from "../../data.json"
 import Calender from "../Calender"
+import { getMonthName } from "../Calender"
 
-export function Input({variable, level}){
-    let { HotelData } = useContext(Context);
-    let [hotelData, setHotelData] = HotelData;
+export function Input({variable, level, waitstuff}){
     let [choice, setChoice] = variable;
     let [search,setSearch] = useState('');
     return(
@@ -14,7 +13,7 @@ export function Input({variable, level}){
             <p className="text-2xl text-right font-semibold">{level}</p>
             
             {
-                !(level.includes('amount'))?
+                waitstuff?
                 <button id="dropdownSearchButton" data-dropdown-toggle={level} data-dropdown-placement="bottom" className="my-4 text-white text-lg focus:ring-4 focus:outline-none font-medium rounded-lg px-5 py-2.5 text-center inline-flex items-center bg-gray-800 hover:bg-gray-700 focus:ring-gray-800 w-full" type="button">
                     Select {level}
                     <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
@@ -39,8 +38,8 @@ export function Input({variable, level}){
                 </div>
                 <ul className="px-3 pb-3 overflow-y-auto text-sm text-gray-200" aria-labelledby="dropdownSearchButton">
                     {
-                        !(level.includes('amount'))?
-                        [...new Set(hotelData.map(item => item[(['Hotel','Section','Supervisor','Waitstuff'].indexOf(level))]))].map((options, index) => {
+                        waitstuff?
+                        waitstuff.map((options, index) => {
                             if(options.toLowerCase().includes(search.toLowerCase())) return(<li>
                                 <button className="w-full text-left py-2 ml-2 text-sm font-medium rounded text-gray-300 hover:bg-gray-600" value={options} onClick={e=>setChoice(e.target.value)}>{options}</button>
                             </li>)
@@ -68,17 +67,40 @@ export default function Sales(){// data entry component
     let Target = useState('')
     let Actuals = useState('')
     let Datestamp = useState([(new Date()).getFullYear(),(new Date()).getMonth(),(new Date()).getDate()])
+    let [targets, setTargets] = useState({})
+    let [waitstuff, setWaitstuff] = useState([])
 
     useEffect(()=>{
         fetch(`${baseURL}/getStuff`)
         .then(res => res.json())
         .then(data => {
-            console.log('\tSALEs\t!!',data)
             if(data.status=="success"){
+                console.log(data.response)
+                setTargets(data.response)
+                if (data.response[`${Datestamp[0][0]}-${getMonthName(Datestamp[0][1])}-${Datestamp[0][2]}`]==undefined) alert('No targets set for today')
+                else {
+                    let chosen = Object.keys(data.response[`${Datestamp[0][0]}-${getMonthName(Datestamp[0][1])}-${Datestamp[0][2]}`])
+                    setWaitstuff(chosen)
+                }
             }
         }).catch(err => {console.log(err);alert("server error")})
     },[])
-    useEffect(()=>{},[Datestamp[0]])
+    useEffect(()=>{
+        if (targets[`${Datestamp[0][0]}-${getMonthName(Datestamp[0][1])}-${Datestamp[0][2]}`]==undefined) alert('No targets set for this date')
+        else setWaitstuff(Object.keys(targets[`${Datestamp[0][0]}-${getMonthName(Datestamp[0][1])}-${Datestamp[0][2]}`]))
+    },[Datestamp[0]])
+    useEffect(()=>{
+        if (!(targets[`${Datestamp[0][0]}-${getMonthName(Datestamp[0][1])}-${Datestamp[0][2]}`]==undefined)){
+            console.log('Weird effect !!',targets[`${Datestamp[0][0]}-${getMonthName(Datestamp[0][1])}-${Datestamp[0][2]}`][Waitstuff[0]])
+            let selected = targets[`${Datestamp[0][0]}-${getMonthName(Datestamp[0][1])}-${Datestamp[0][2]}`][Waitstuff[0]]
+            if (!(selected==undefined)){
+                Hotels[1](selected.hotel)
+                Sections[1](selected.section)
+                Supervisor[1](selected.supervisor)
+                Target[1](selected.target)
+            }
+        }
+    },[Waitstuff[0]])
 
     let submit = (e) => {
         e.preventDefault()
@@ -116,7 +138,7 @@ export default function Sales(){// data entry component
                 <Input variable={Hotels} level='Hotel'/>
                 <Input variable={Sections} level='Section'/>
                 <Input variable={Supervisor} level='Supervisor'/>
-                <Input variable={Waitstuff} level='Waitstuff'/>
+                <Input variable={Waitstuff} level='Waitstuff' waitstuff={waitstuff}/>
                 <Input variable={Target} level='Target amount'/>
                 <Input variable={Actuals} level='Actual amount'/>
                 <button className="md:col-span-2 flex lg:w-1/2 w-full mx-auto justify-center rounded-md bg-blue-800 px-3 py-2 text-xl font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" onClick={e=>submit(e)}>Submit</button>   

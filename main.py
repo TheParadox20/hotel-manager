@@ -8,7 +8,9 @@ import hashlib
 #CREATE TABLE admission (id INT AUTO_INCREMENT PRIMARY KEY, role INT, username VARCHAR(255), name VARCHAR(255), buisness VARCHAR(255), password VARCHAR(64), phone INT)
 #CREATE TABLE sales (id INT AUTO_INCREMENT PRIMARY KEY, hotel VARCHAR(255), section VARCHAR(255), supervisor VARCHAR(255), waitstuff VARCHAR(255), target INT, actual INT, date VARCHAR(255))
 #CREATE TABLE inventory (id INT AUTO_INCREMENT PRIMARY KEY, hotel VARCHAR(255), purchases INT, grossales INT, netsales INT,  opening INT, closing INT , date VARCHAR(255))
+#CREATE TABLE targets (id INT AUTO_INCREMENT PRIMARY KEY, buisness VARCHAR(255), manager VARCHAR(255), section VARCHAR(255), supervisor VARCHAR(255), waitstuff VARCHAR(255), note VARCHAR(255), amount INT, date VARCHAR(20))
 #CREATE TABLE buisness (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), type VARCHAR(255))
+#CREATE TABLE sections (id INT AUTO_INCREMENT PRIMARY KEY, buisness VARCHAR(255), name VARCHAR(255))
 
 con = mysql.connector.connect(
   host="q0h7yf5pynynaq54.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
@@ -77,6 +79,13 @@ def admit():
         con.commit()
     return {"status":"success","response":{"user":user[3],"role":user[1]}}
 
+@app.route("/addUser", methods=["POST"])
+def addUser():
+    data = request.get_json()
+    cur.execute("INSERT INTO users (role, username, name, buisness, password) VALUES (%s, %s, %s, %s, %s)", (data['role'], data['username'], data['name'], data['buisness'], hashlib.sha256("user".encode()).hexdigest()))
+    con.commit()
+    return {"status":"success","response":""}
+
 @app.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
@@ -140,19 +149,29 @@ def setinventory():
 
 @app.route("/buisnesses")
 def buisnesses():
-    cur.execute("SELECT name, type FROM buisness")
-    buisnesses = cur.fetchall()
+    role = session.get("user")[1]
+    buisnesses = []
+    if role==4:
+        cur.execute("SELECT name, type FROM buisness")
+        buisnesses = cur.fetchall()
+    elif role==3:
+        cur.execute("SELECT buisness, name FROM sections WHERE buisness = %s", (session.get("user")[4],))
+        buisnesses = cur.fetchall()
+    print('Buisnesses !! ',buisnesses)
     # select all unique users from users table
-    cur.execute("SELECT DISTINCT name,role FROM users")
+    cur.execute("SELECT name, buisness ,role FROM users")
     users = cur.fetchall()
     return {"status":"success","response":{"buisnesses":buisnesses,"users":users}}
 
 
 @app.route("/addbuisness", methods=["POST"])
 def addbuisness():
-    #insert into buisness DB
     data = request.get_json()
-    cur.execute("INSERT INTO buisness (name, type) VALUES (%s, %s)", (data["name"], data["type"]))
+    role = session.get("user")[1]
+    if role==4:
+        cur.execute("INSERT INTO buisness (name, type) VALUES (%s, %s)", (data["name"], data["type"]))
+    elif role==3:
+        cur.execute("INSERT INTO sections (buisness, name) VALUES (%s, %s)", (session.get("user")[4], data["name"]))
     con.commit()
     return {"status":"success","response":""}
 
@@ -171,6 +190,61 @@ def getFile(file_name):
 def logs():
     pass
 
+@app.route("/getTargets")
+def getTarget():
+    role = session.get("user")[1]
+    user = session.get("user")[3]
+
+    #create targets object {date:amount}
+    targets = {}
+    if role == 3:
+        cur.execute("SELECT date, amount FROM targets WHERE manager = %s", (user,))
+    elif role == 2:
+        cur.execute("SELECT date, amount FROM targets WHERE supervisor = %s", (user,))
+    elif role == 1:
+        cur.execute("SELECT date, amount FROM targets WHERE waitstuff = %s", (user,))
+    rows = cur.fetchall()
+    for row in rows:
+        targets[row[0]] = row[1]
+
+    #from users table get all users with role 1
+    cur.execute("SELECT name FROM users WHERE role = %s", (role-1,))
+    users = cur.fetchall()
+
+    #get buisnesses or sections
+    if role==4:
+        cur.execute("SELECT name FROM buisness")
+    elif role==3:
+        cur.execute("SELECT name FROM sections WHERE buisness = %s", (session.get("user")[4],))
+    buisnesses = cur.fetchall()
+
+    return {
+        "status":"success",
+        "response":{
+            "previous":[
+                ["My hotel","Samson Mongare","Waitstuff","20,000","Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptate ea aperiam maiores iste vero eaque alias dolor ut obcaecati eligendi harum commodi nulla debitis, recusandae repellendus earum vel. Nobis, maxime!","2023-October-30"],
+            ],
+            "users":users,
+            "buisness":buisnesses,
+            "targets":targets
+        }
+    }
+
+@app.route("/setTarget", methods=["POST"])
+def setTarget():
+    data = request.get_json()
+    role = session.get("user")[1]
+    print(data)
+    if role == 4:#admin
+        cur.execute("INSERT INTO targets (buisness, manager, section, supervisor, waitstuff, note, amount, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (data["position"], data["name"], '#', '#', '#', data["note"], data["amount"], data["date"]))
+    elif role == 3:#manager
+        cur.execute("INSERT INTO targets (buisness, manager, section, supervisor, waitstuff, note, amount, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", ('#', '#', data["position"], data["name"], '#', data["note"], data["amount"], data["date"]))
+    elif role == 2:#supervisor
+        cur.execute("SELECT section FROM targets WHERE supervisor = %s AND date = %s", (session.get("user")[3], data["date"]))
+        section = cur.fetchone()
+        cur.execute("INSERT INTO targets (buisness, manager, section, supervisor, waitstuff, note, amount, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", ('#', '#', section[0], '#', data["name"], data["note"], data["amount"], data["date"]))
+    con.commit()
+    return {"status":"success","response":""}
 
 if __name__ == '__main__':
-    app.run(debug=False, port=os.getenv("PORT", default=5000),host="0.0.0.0")
+    app.run(debug=True, port=os.getenv("PORT", default=5000),host="0.0.0.0")

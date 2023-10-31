@@ -19,7 +19,7 @@ export function Add({Control, Others, Role}){
             })
         }).then(res=>res.json()).then(data=>{
             if(data.status === 'success'){
-                alert('Buisness added successfully')
+                alert(`${Role==4?'Buisness':'Section'} added successfully`)
                 Others[1]([...Others[0],[type,name]])
                 Control[1](false)
             }else if(data.status === 'error'){
@@ -31,7 +31,7 @@ export function Add({Control, Others, Role}){
         <>
         <form className="mx-4 lg:w-1/2 lg:mx-auto">
             {
-                Role==6 &&
+                Role==4 &&
                 <div>
                     <label htmlFor="type" className="block text-lg font-bold leading-6 my-6">
                         Type
@@ -97,10 +97,13 @@ export default function Buisness({Role}){
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className=" bg-gray-800 rounded py-4">
                 {
-                    ControlAdd[0]?<Add Control={ControlAdd} Others={Buisnesses} Role={user.role} />:
+                    ControlAdd[0]
+                    ?
+                    <Add Control={ControlAdd} Others={Buisnesses} Role={user.role} />
+                    :
                     <div className="flex gap-4 items-center justify-center flex-col" onClick={e=>ControlAdd[1](true)}>
                         <button className="w-max"><img className="w-48 block" src="/add.svg"/></button>
-                        <p className="text-2xl my-4 font-semibold">Add {user.role==6?"Buisness":"Section"}</p>
+                        <p className="text-2xl my-4 font-semibold">Add {user.role==4?"Buisness":"Section"}</p>
                     </div>
                 }
             </div>
@@ -117,8 +120,8 @@ export default function Buisness({Role}){
                                 </>
                                 :
                                 <>
-                                <th className="px-6 py-3">Buisness</th>
                                 <th className="px-6 py-3">Section</th>
+                                <th className="px-6 py-3">Buisness</th>
                                 </>
                             }
                             <th className="px-6 py-3"></th>

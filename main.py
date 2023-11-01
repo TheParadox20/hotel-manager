@@ -195,17 +195,21 @@ def getTarget():
     role = session.get("user")[1]
     user = session.get("user")[3]
 
+    previous = []
     #create targets object {date:amount}
     targets = {}
+    if role == 4:
+        cur.execute("SELECT date, amount, note, buisness FROM targets WHERE buisness != '#'")
     if role == 3:
-        cur.execute("SELECT date, amount FROM targets WHERE manager = %s", (user,))
+        cur.execute("SELECT date, amount, note, buisness FROM targets WHERE manager = %s", (user,))
     elif role == 2:
-        cur.execute("SELECT date, amount FROM targets WHERE supervisor = %s", (user,))
+        cur.execute("SELECT date, amount, note, section FROM targets WHERE supervisor = %s", (user,))
     elif role == 1:
-        cur.execute("SELECT date, amount FROM targets WHERE waitstuff = %s", (user,))
+        cur.execute("SELECT date, amount, note, section FROM targets WHERE waitstuff = %s", (user,))
     rows = cur.fetchall()
     for row in rows:
         targets[row[0]] = row[1]
+        previous.append([row[3],row[1],row[2],row[0]])
 
     #from users table get all users with role 1
     cur.execute("SELECT name FROM users WHERE role = %s", (role-1,))
@@ -221,9 +225,7 @@ def getTarget():
     return {
         "status":"success",
         "response":{
-            "previous":[
-                ["My hotel","Samson Mongare","Waitstuff","20,000","Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptate ea aperiam maiores iste vero eaque alias dolor ut obcaecati eligendi harum commodi nulla debitis, recusandae repellendus earum vel. Nobis, maxime!","2023-October-30"],
-            ],
+            "previous":previous,
             "users":users,
             "buisness":buisnesses,
             "targets":targets

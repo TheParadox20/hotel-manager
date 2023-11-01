@@ -37,8 +37,8 @@ export default function Target(){
             })
         }).then(res=>res.json()).then(data=>{
             if(data.status === 'success'){
-                setSum(sum+amount)
-                setPrevious([...previous,[buisness,owner,['Sales executive','Supervisor','Manager'][user.role-2],amount,note,`${Datestamp[0][0]}-${getMonthName(Datestamp[0][1])}-${Datestamp[0][2]}`]])
+                setSum(parseInt(sum)+parseInt(amount))
+                if (user.role === 4) setPrevious([...previous,[buisness,amount,note,`${Datestamp[0][0]}-${getMonthName(Datestamp[0][1])}-${Datestamp[0][2]}`]])
                 setOwner('')
                 setBuisness('')
                 setAmount(0)
@@ -77,20 +77,13 @@ export default function Target(){
             <div  className="w-full lg:ml-8 bg-gray-800 rounded py-4 px-4 overflow-x-scroll">
                 <div className="flex flex-col md:flex-row justify-between mb-6 font-semibold text-xl">
                     <h3 className="">Set target  <span className="ml-2 text-md">({day})</span></h3>
-                    <h3 className={`${sum-command>=0?'text-green-500':'text-red-500'}`}>{`${sum-command>=0?'+':'-'}${sum-command}`}.sh</h3>
+                    {
+                        user.role!=4 &&
+                        <h3 className={`${sum-command>=0?'text-green-500':'text-red-500'}`}>{`${sum-command>=0?'+':''}${sum-command}`}.sh</h3>
+                    }
                 </div>
                 <div className="w-full h-full justify-center items-center">
                     <form onSubmit={submit} className="flex flex-col justify-center items-center gap-4">
-                        <select className="w-3/4 bg-gray-900 py-2 px-2 rounded text-gray-100" name="users" id="" value={owner} onChange={e=>setOwner(e.target.value)}>
-                            <option value="">Select user</option>
-                            {
-                                users.map((user,index)=>{
-                                    return(
-                                        <option value={user}>{user}</option>
-                                    )
-                                })
-                            }
-                        </select>
                         {
                             user.role>2 &&
                             <select className="w-3/4 bg-gray-900 py-2 px-2 rounded text-gray-100" name="buisness" id="" value={buisness} onChange={e=>setBuisness(e.target.value)}>
@@ -104,6 +97,16 @@ export default function Target(){
                                 }
                             </select>
                         }
+                        <select className="w-3/4 bg-gray-900 py-2 px-2 rounded text-gray-100" name="users" id="" value={owner} onChange={e=>setOwner(e.target.value)}>
+                            <option value="">Select user</option>
+                            {
+                                users.map((user,index)=>{
+                                    return(
+                                        <option value={user}>{user}</option>
+                                    )
+                                })
+                            }
+                        </select>
                         <input className="w-3/4 bg-gray-900 py-2 px-2 rounded text-gray-100" type="number" placeholder="Amount" onChange={(e)=>setAmount(e.target.value)} required/>
                         <input className="w-3/4 bg-gray-900 py-2 px-2 rounded text-gray-100 whitespace-wrap h-28" type="text" placeholder="Note" onChange={(e)=>setNote(e.target.value)} required/>
                         <button className="w-3/4 bg-blue-900 py-2 px-2 rounded text-gray-100 my-4" type="submit" onClick={e=>submit(e)}>Submit</button>
@@ -119,10 +122,8 @@ export default function Target(){
             <thead className="text-xs text-gray-100 uppercase bg-blue-900 sticky top-0">
                 <tr>
                     {user.role==4 && <th className="px-6 py-3">Buisness</th>}
-                    {user.role==3 && <th className="px-6 py-3">Section</th>}
-                    {user.role==2 && <th className="px-6 py-3">Sales executive</th>}
-                    <th className="px-6 py-3">User</th>
-                    <th className="px-6 py-3">Role</th>
+                    {user.role==3 && <th className="px-6 py-3">Buisness</th>}
+                    {user.role==2 && <th className="px-6 py-3">Section</th>}
                     <th className="px-6 py-3">Target</th>
                     <th className="px-6 py-3">Note</th>
                     <th className="px-6 py-3">Date</th>
@@ -137,8 +138,6 @@ export default function Target(){
                                 <td className="px-6 py-4 whitespace-nowrap">{row[1]}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{row[2]}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{row[3]}</td>
-                                <td className="px-6 py-4 whitespace-normal">{row[4]}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{row[5]}</td>
                             </tr>
                         )
                     })
@@ -148,8 +147,6 @@ export default function Target(){
                     [...Array(10-previous.length)].map((item,index)=>{
                         return(
                             <tr className="bg-gray-800 border-b border-gray-700">
-                                <td className="px-6 py-4 whitespace-nowrap"></td>
-                                <td className="px-6 py-4 whitespace-nowrap"></td>
                                 <td className="px-6 py-4 whitespace-nowrap"></td>
                                 <td className="px-6 py-4 whitespace-nowrap"></td>
                                 <td className="px-6 py-4 whitespace-nowrap"></td>

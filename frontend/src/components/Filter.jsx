@@ -105,12 +105,11 @@ export default function Filter(){
     },[StartDate[0],EndDate[0]])
 
     return(
-        <>
-        <div className="flex flex-col rounded bg-gray-800 text-gray-50 h-96 w-full mx-auto relative px-2 overflow-y-scroll">
+        <div className="flex flex-col rounded bg-gray-800 text-gray-50 h-full w-full mx-auto relative px-2 overflow-y-scroll">
             <div className="flex my-4">
                 <img className="w-4 mx-2" src="/filter.svg" alt="" />
-                <h3 className="text-xl font-semibold">Filter</h3>
-                <button className="mx-2 absolute right-1" onClick={e=>{toggler(e,"options")}}><img className="w-8" src="/options.svg" alt="" /></button>
+                <h3 className="2xl:text-xl font-semibold">Filter</h3>
+                <button className="mx-2 absolute right-1" onClick={e=>{toggler(e,"options")}}><img className="w-6 2xl:w-8" src="/options.svg" alt="" /></button>
                     <div id="options" className="hidden font-semibold origin-top-left absolute right-4 top-6 mt-2 w-48 rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5">
                         <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                         <button onClick={e=>{toggler(e,"options")}} className="block w-full pr-4 text-right">X</button>
@@ -120,13 +119,13 @@ export default function Filter(){
                     </div>
             </div>
             <div className="flex justify-around">
-                <button onClick={e=>{toggler(e,"sort")}} className="w-full font-semibold py-4 hover:scale-105 hover:bg-gray-800"><img className="inline w-6 mx-2" src="/sort.svg" alt="" />Sort</button>
+                <button onClick={e=>{toggler(e,"sort")}} className="w-full font-semibold py-4 hover:scale-105 hover:bg-gray-800"><img className="inline w-5 2xl:w-6 mx-2" src="/sort.svg" alt="" />Sort</button>
                     <div id="sort" className="z-10 hidden origin-top-right absolute right-4 mt-2 w-48 rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5">
-                        <div className="py-1 overflow-y-scroll max-h-40" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                        <div className="py-1 overflow-y-scroll max-h-44 2xl:max-h-52" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                             <div className="flex my-2">
                                 <button onClick={e=>setFilter({...filter, descending:!filter.descending})} className="flex">
                                     <img className="inline w-8 ml-2" src="/sort.svg" alt="" />
-                                    <div className=" text-xs">{filter.descending?"A\nZ":"Z\nA"}</div>
+                                    <div className="text-xs">{filter.descending?"A\nZ":"Z\nA"}</div>
                                 </button>
                                 <button onClick={e=>{toggler(e,"sort")}} className="block w-full pr-4 text-right">X</button>
                             </div>
@@ -139,7 +138,7 @@ export default function Filter(){
                             <button onClick={e=>{toggler(e,"sort");setFilter({...filter, sort:6})}} className="block w-full text-left px-4 py-2 text-sm text-gray-50 hover:bg-gray-800" role="menuitem">Date</button>
                         </div>
                     </div>
-                <button onClick={e=>{toggler(e,"weeks")}} className="w-full py-4 hover:scale-105 hover:bg-gray-800"><img className="inline w-6 mx-2" src="/date.svg" alt="" />Date</button>
+                <button onClick={e=>{toggler(e,"weeks")}} className="w-full py-4 hover:scale-105 hover:bg-gray-800"><img className="inline w-5 mx-2" src="/date.svg" alt="" />Date</button>
                     <div id="weeks" className="hidden origin-top-left absolute left-4 mt-2 rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5 overflow-y-scroll max-h-96">
                         <div className="flex justify-between mx-2 my-1">
                             <div>{`${(new Date(filter.start[0],filter.start[1],1)).toLocaleString('default', {month:'long'})}-${filter.start[2]}${getDaySuffix(filter.start[2])}`} to {`${(new Date(filter.end[0],filter.end[1],1)).toLocaleString('default', {month:'long'})}-${filter.end[2]}${getDaySuffix(filter.end[2])}`}</div>
@@ -154,7 +153,7 @@ export default function Filter(){
                         </div>
                     </div>
             </div>
-            <input className="bg-slate-600 w-3/4 mx-auto rounded-full px-4 py-2 my-2" type="search" placeholder="search" value={search} onChange={e=>setSearch(e.target.value)}/>
+            <input className="bg-slate-600 w-3/4 2xl:w-2/3 mx-auto rounded-full px-4 py-2 my-2" type="search" placeholder="search" value={search} onChange={e=>setSearch(e.target.value)}/>
             <div className="flex justify-between">
                 {
                     filter.depth.length > 0 ? <button className="ml-4 w-6" onClick={e=>{setFilter({...filter,depth:filter.depth.slice(0,-1)});setSearch('')}}><img className="w-full" src="/back.svg"/></button> : null
@@ -166,21 +165,20 @@ export default function Filter(){
                     ['Hotel','Section','Supervisor','waitstuff'].map((item,index)=>{
                         if(item.toLowerCase().includes(search.toLowerCase()))
                         return(
-                            <button className="block w-full text-left text-lg py-4 hover:bg-gray-900" value={index} onClick={e=>setFilter({...filter,depth:[...filter.depth,parseInt(e.target.value)]})}>{item} <img className="w-6 inline float-right" src="/right.svg" alt="" /></button>
+                            <button className="block w-full text-left 2xl:text-lg py-4 hover:bg-gray-900" value={index} onClick={e=>setFilter({...filter,depth:[...filter.depth,parseInt(e.target.value)]})}>{item} <img className="w-6 inline float-right" src="/right.svg" alt="" /></button>
                         )
                     }):
                     filter.depth.length==1?
                     [...new Set(hotelData.map(item=>item[filter.depth[0]]))].map((item,index)=>{
                         if(item.toLowerCase().includes(search.toLowerCase()))
                         return(
-                            <button className="block w-full text-left text-lg py-4 hover:bg-gray-900" value={item} onClick={e=>setFilter({...filter,depth:[filter.depth[0],e.target.value]})}>{item} <img className="w-6 inline float-right" src="/right.svg" alt="" /></button>
+                            <button className="block w-full text-left 2xl:text-lg py-4 hover:bg-gray-900" value={item} onClick={e=>setFilter({...filter,depth:[filter.depth[0],e.target.value]})}>{item} <img className="w-6 inline float-right" src="/right.svg" alt="" /></button>
                         )
                     }):
-                    <p className="block w-full text-left text-lg py-4 hover:bg-gray-900">{filter.depth[1]}</p>
+                    <p className="block w-full text-left 2xl:text-lg py-4 hover:bg-gray-900">{filter.depth[1]}</p>
                 }
                 <p></p>
             </div>
         </div>
-        </>
     )
 }

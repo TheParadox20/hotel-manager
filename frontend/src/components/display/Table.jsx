@@ -32,7 +32,7 @@ export default function Table(){
     }
 
     return(
-        <table className="w-full text-sm text-left text-gray-400 table-auto">
+        <table className="w-full text-sm lg:text-xs 2xl:text-sm text-left text-gray-400 table-auto">
             <thead className="text-xs text-gray-100 uppercase bg-blue-900 sticky top-0">
                 {
                     !filter.inventory?

@@ -79,7 +79,7 @@ export default function Dashboard(){
     }
     
     return(
-        <div className="whitespace-nowrap">
+        <div className="whitespace-nowrap text-sm">
             <nav className="fixed top-0 z-50 w-full bg-gray-800 border-gray-700">
             <div className="px-3 py-3 lg:px-5 lg:pl-3">
                 <div className="flex items-center justify-between">
@@ -133,7 +133,7 @@ export default function Dashboard(){
             </div>
             </nav>
 
-            <aside onClick={e=>toggle(e)} id="logo-sidebar" className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full border-r sm:translate-x-0 bg-gray-800 border-gray-700" aria-label="Sidebar">
+            <aside onClick={e=>toggle(e)} id="logo-sidebar" className="fixed top-0 left-0 z-40 w-fit h-screen pt-20 transition-transform -translate-x-full border-r sm:translate-x-0 bg-gray-800 border-gray-700" aria-label="Sidebar">
             <div className="h-full px-3 pb-4 overflow-y-auto bg-gray-800">
                 <ul className="space-y-2 font-medium">
                     <div onClick={e=>setPage('home')}>
@@ -219,7 +219,7 @@ export default function Dashboard(){
 
             {/* Start of main content */}
 
-            <div onClick={e=>toggle(e)} className="sm:ml-64 bg-gray-700 h-screen overflow-y-scroll">
+            <div onClick={e=>toggle(e)} className="sm:ml-52 bg-gray-700 h-screen overflow-y-scroll">
                 {page === 'home' && <Home />}
                 {page === 'settings' && <Settings />}
                 {page === 'download' && <Download />}
